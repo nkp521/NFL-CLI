@@ -2,27 +2,24 @@
 
 ## Team Features
 
-- **Create a team** – Add a new team by specifying the name and city to begin managing its players.
-- **List teams** – Display all teams currently in the system for selection or browsing.
-- **View team roster** – View all players assigned to a selected team to manage its composition.
+- **As a user, I want to create a team** by entering its name and city so I can start managing its players.
+- **As a user, I want to list all teams** in the system so I can view or select one to manage.
+- **As a user, I want to view a team’s roster** so I can see which players are on that team.
 
 ## Player Features
 
-- **Add a player** – Assign a player to a team by entering name, number, and position.
-- **List players** – Show all players across all teams for quick review or bulk actions.
-- **Update a player** – Modify player details (like jersey number, team, and/or position) with existing values pre-filled.
-- **Delete a player** – Remove a player from the database if they are no longer part of a team.
+- **As a user, I want to add a player** to a team by entering their name, number, and position.
+- **As a user, I want to list all players** across all teams so I can quickly review or manage them.
+- **As a user, I want to update a player’s details**, with current values shown, so I can make changes easily.
+- **As a user, I want to delete a player** so I can remove them from the system if needed.
 
 ## CLI Experience
 
-- **Interactive menu** – Navigate app features using a menu-based loop for ease of use.
-- **Prompt on updates** – During updates, show current values and allow selective editing.
-- **Readable output** – Format JSON responses into clear, user-friendly CLI tables or lists.
+- **As a user, I want to navigate the app through an interactive menu** so I can easily choose what I want to do.
+- **As a user, I want to see current values when updating players** so I can edit only what needs to change.
+- **As a user, I want the app to format output clearly** so it's easy to read results in the terminal.
 
-# Additional
+## Additional: Position Table
 
-## Position Table
-
-- **Create Position Table** – Store positions in a separate table and link them to players via a many-to-many relationship.
-
-- **List positions** – Provide a way to view all available positions for reference or assignment.
+- **As a user, I want to manage positions in a separate table** so I can reuse and assign them to players across teams.
+- **As a user, I want to list all available positions** so I can reference or assign them easily during player creation or updates.
