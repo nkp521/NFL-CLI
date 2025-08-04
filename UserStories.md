@@ -1,25 +1,101 @@
-# NFL Roster Manager
+# NFL Roster Manager CLI
 
-## Team Features
+## Feature 1: Create a Team
 
-- **As a user, I want to create a team** by entering its name and city so I can start managing its players.
-- **As a user, I want to list all teams** in the system so I can view or select one to manage.
-- **As a user, I want to view a team’s roster** so I can see which players are on that team.
+**User Story**  
+As a user, I want to create a team by entering its name and city so I can start assigning players.
 
-## Player Features
+**Details**  
+Prompt the user to enter a team name and city. Save it to the database and confirm success.
 
-- **As a user, I want to add a player** to a team by entering their name, number, and position.
-- **As a user, I want to list all players** across all teams so I can quickly review or manage them.
-- **As a user, I want to update a player’s details**, with current values shown, so I can make changes easily.
-- **As a user, I want to delete a player** so I can remove them from the system if needed.
+---
 
-## CLI Experience
+## Feature 2: List All Teams
 
-- **As a user, I want to navigate the app through an interactive menu** so I can easily choose what I want to do.
-- **As a user, I want to see current values when updating players** so I can edit only what needs to change.
-- **As a user, I want the app to format output clearly** so it's easy to read results in the terminal.
+**User Story**  
+As a user, I want to list all teams so I can view or select one to manage.
 
-## Additional: Position Table
+**Details**  
+Show all teams in a numbered list with name and city.
 
-- **As a user, I want to manage positions in a separate table** so I can reuse and assign them to players across teams.
-- **As a user, I want to list all available positions** so I can reference or assign them easily during player creation or updates.
+---
+
+## Feature 3: View a Team Roster
+
+**User Story**  
+As a user, I want to view all players on a selected team so I can manage its roster.
+
+**Details**  
+Display players on the selected team with name, number, and position.
+
+---
+
+## Feature 4: Add a Player
+
+**User Story**  
+As a user, I want to add a player by entering their name, number, and position so they can join a team.
+
+**Details**  
+Prompt for info and associate the player with the selected team.
+
+---
+
+## Feature 5: List All Players
+
+**User Story**  
+As a user, I want to list all players across all teams so I can quickly review them.
+
+**Details**  
+Display all players with name, number, position, and team.
+
+---
+
+## Feature 6: Update a Player
+
+**User Story**  
+As a user, I want to update a player’s info so I can make changes as needed.
+
+**Details**  
+Show current values, allow updates to name, number, position, or team.
+
+---
+
+## Feature 7: Delete a Player
+
+**User Story**  
+As a user, I want to delete a player if they’re no longer on a team.
+
+**Details**  
+Select a player and confirm before deleting.
+
+---
+
+## Additional Features
+
+### Interactive Menu
+
+**User Story**  
+As a user, I want to use a simple menu to navigate all features easily.
+
+**Details**  
+Use a loop-based menu for all CLI actions.
+
+---
+
+### Clean CLI Output
+
+**User Story**  
+As a user, I want formatted output so it’s easy to read.
+
+**Details**  
+Display results using tables or clear lists.
+
+---
+
+### Manage Positions (Many-to-Many)
+
+**User Story**  
+As a user, I want to manage positions in a separate table so they can be reused across players.
+
+**Details**  
+Use a `positions` table with many-to-many association with players.
