@@ -17,19 +17,12 @@ class APIClient
     { error: "Failed to fetch owners: #{e.message}" }
   end
 
-  # def get_owner(id)
-  #   response = RestClient.get("#{@base_url}/owners/#{id}")
-  #   JSON.parse(response.body)
-  # rescue RestClient::Exception => e
-  #   { error: "Failed to fetch owner: #{e.message}" }
-  # end
-
-  #   def create_owner(data)
-  #     response = RestClient.post("#{@base_url}/owners", data.to_json, content_type: :json)
-  #     JSON.parse(response.body)
-  #   rescue RestClient::Exception => e
-  #     { error: "Failed to create owner: #{e.message}" }
-  #   end
+  def create_team(data)
+    response = RestClient.post("#{@base_url}/teams", data.to_json, content_type: :json)
+    JSON.parse(response.body)
+  rescue RestClient::Exception => e
+    { error: "Failed to create team: #{e.message}" }
+  end
 
   #   def update_owner(id, data)
   #     response = RestClient.patch("#{@base_url}/owners/#{id}", data.to_json, content_type: :json)
@@ -156,7 +149,7 @@ class CLIInterface
       else
         response.each do |team|
           display_team(team)
-          puts "-" * 50
+          puts "-" * 75
         end
       end
     else
@@ -204,8 +197,25 @@ class CLIInterface
     end
   end
 
-  def create_team
-    puts "2"
+  def create_owner
+    puts "\n=== Create New Team ==="
+
+    print "Name: "
+    name = gets.chomp
+
+    print "City: "
+    city = gets.chomp
+
+    data = { name: name, city: city }
+
+    response = @api_client.create_owner(data)
+
+    if response[:error]
+      puts "Error: #{response[:error]}"
+    else
+      puts "Owner created successfully!"
+      display_team(response)
+    end
   end
 
   def create_player
