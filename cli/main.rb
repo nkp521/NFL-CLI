@@ -197,7 +197,7 @@ class CLIInterface
     end
   end
 
-  def create_owner
+  def create_team
     puts "\n=== Create New Team ==="
 
     print "Name: "
@@ -208,12 +208,12 @@ class CLIInterface
 
     data = { name: name, city: city }
 
-    response = @api_client.create_owner(data)
+    response = @api_client.create_team(data)
 
     if response[:error]
       puts "Error: #{response[:error]}"
     else
-      puts "Owner created successfully!"
+      puts "Congrats on creating your own NFL Team!!"
       display_team(response)
     end
   end
