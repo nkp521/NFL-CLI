@@ -14,22 +14,29 @@ class APIClient
     response = RestClient.get("#{@base_url}/teams")
     JSON.parse(response.body)
   rescue RestClient::Exception => e
-    { error: "Failed to fetch owners: #{e.message}" }
+    { error: "Failed to fetch Owners: #{e.message}" }
   end
 
   def create_team(data)
     response = RestClient.post("#{@base_url}/teams", data.to_json, content_type: :json)
     JSON.parse(response.body)
   rescue RestClient::Exception => e
-    { error: "Failed to create team: #{e.message}" }
+    { error: "Failed to create Team: #{e.message}" }
   end
 
-  #   def update_owner(id, data)
-  #     response = RestClient.patch("#{@base_url}/owners/#{id}", data.to_json, content_type: :json)
-  #     JSON.parse(response.body)
-  #   rescue RestClient::Exception => e
-  #     { error: "Failed to update owner: #{e.message}" }
-  #   end
+  def get_team(id)
+    response = RestClient.get("#{@base_url}/teams/#{id}")
+    JSON.parse(response.body)
+  rescue RestClient::Exception => e
+    { error: "Failed to fetch team: #{e.message}" }
+  end
+
+  def update_team(id, data)
+    response = RestClient.patch("#{@base_url}/teams/#{id}", data.to_json, content_type: :json)
+    JSON.parse(response.body)
+  rescue RestClient::Exception => e
+    { error: "Failed to move Team: #{e.message}" }
+  end
 
   #   def delete_owner(id)
   #     response = RestClient.delete("#{@base_url}/owners/#{id}")
@@ -42,14 +49,14 @@ class APIClient
     response = RestClient.get("#{@base_url}/players")
     JSON.parse(response.body)
   rescue RestClient::Exception => e
-    { error: "Failed to fetch pets: #{e.message}" }
+    { error: "Failed to fetch Players: #{e.message}" }
   end
 
   def create_player(data)
     response = RestClient.post("#{@base_url}/players", data.to_json, content_type: :json)
     JSON.parse(response.body)
   rescue RestClient::Exception => e
-    { error: "Failed to create player: #{e.message}" }
+    { error: "Failed to create Player: #{e.message}" }
   end
 
   #   def update_pet(id, data)
@@ -70,7 +77,7 @@ class APIClient
     response = RestClient.get("#{@base_url}/teams/#{team_id}/players")
     JSON.parse(response.body)
   rescue RestClient::Exception => e
-    { error: "Failed to fetch owner's pets: #{e.message}" }
+    { error: "Failed to fetch Team's Players: #{e.message}" }
   end
 end
 
@@ -214,14 +221,7 @@ class CLIInterface
   def create_player
     puts "\n=== Create New Player ==="
 
-    teams_response = @api_client.get_teams
-    if teams_response.is_a?(Array) && !teams_response.empty?
-      puts "Available Teams:"
-      teams_response.each { |team| puts "#{team['id']}. #{team['name']}" }
-    else
-      puts "No Teams wish to sign you."
-      return
-    end
+    show_teams_info
 
     print "Name: "
     name = gets.chomp
@@ -248,7 +248,35 @@ class CLIInterface
   end
 
   def move_team_location
-    puts "4"
+    show_teams_info
+    print "\nEnter the ID of the Team to move location: "
+    id = gets.chomp.to_i
+
+    team = @api_client.get_team(id)
+    if team[:error]
+      puts "Error: #{team[:error]}"
+      return
+    end
+
+    puts "\nCurrent Team data:"
+    display_team(team)
+
+    puts "\nEnter new city (press Enter to keep current city):"
+
+    print "City (#{team['city']}): "
+    city = gets.chomp
+    city = team['city'] if city.empty?
+
+    data = { city: city }
+
+    response = @api_client.update_team(id, data)
+
+    if response[:error]
+      puts "Error: #{response[:error]}"
+    else
+      puts "Team location updated successfully!"
+      display_team(response)
+    end
   end
 
   def trade_player
@@ -280,6 +308,17 @@ class CLIInterface
 
   def display_team_player(player)
     puts "ID: #{player['id']}  Name: #{player['name']}  Number: #{player['number']}  Position: #{player['position']}"
+  end
+
+  def show_teams_info
+    teams_response = @api_client.get_teams
+    if teams_response.is_a?(Array) && !teams_response.empty?
+      puts "Available Teams:"
+      teams_response.each { |team| puts "#{team['id']}. #{team['name']}" }
+    else
+      puts "No Teams avilable."
+      nil
+    end
   end
 end
 
