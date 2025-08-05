@@ -86,8 +86,8 @@ class CLIInterface
     puts "3. View players by team ID"
     puts "4. Create a new team"
     puts "5. Create a new player"
-    puts "6. Update a team"
-    puts "7. Update a player"
+    puts "6. Move Team Location"
+    puts "7. Trade a Player"
     puts "8. Delete a team"
     puts "9. Delete a player"
     puts "q. Quit"
@@ -116,9 +116,9 @@ class CLIInterface
       when '5'
         create_player
       when '6'
-        update_team
+        move_team_location
       when '7'
-        update_player
+        trade_player
       when '8'
         delete_team
       when '9'
@@ -227,7 +227,7 @@ class CLIInterface
     name = gets.chomp
 
     print "Number: "
-    number = gets.chomp
+    number = gets.chomp.to_i
 
     print "Position: "
     position = gets.chomp
@@ -247,11 +247,11 @@ class CLIInterface
     end
   end
 
-  def update_team
+  def move_team_location
     puts "4"
   end
 
-  def update_player
+  def trade_player
     puts "5"
   end
 
