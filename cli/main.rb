@@ -145,23 +145,43 @@ class CLIInterface
     end
   end
 
-  private
+  def view_all_teams
+    gets.chomp
+  end
 
-    def view_all_teams
-    puts "\n=== All Teams ==="
-    response = @api_client.get_teams
+  def view_all_players
+    gets.chomp
+  end
 
-    if response.is_a?(Array)
-      if response.empty?
-        puts "No teams found."
-      else
-        response.each do |team|
-          display_team(team)
-          puts "-" * 50
-        end
-      end
-    else
-      puts "Error: #{response[:error]}"
-    end
+  def create_team
+    gets.chomp
+  end
+
+  def create_player
+    gets.chomp
+  end
+
+  def update_team
+    gets.chomp
+  end
+
+  def update_player
+    gets.chomp
+  end
+
+  def delete_team
+    gets.chomp
+  end
+
+  def delete_player
+    gets.chomp
+  end
+
+  def view_players_by_team
+    gets.chomp
+  end
+
+  def view_team_by_player
+    gets.chomp
   end
 end
