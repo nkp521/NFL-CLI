@@ -10,12 +10,12 @@ class APIClient
     @base_url = base_url
   end
 
-  # def get_teams
-  #   response = RestClient.get("#{@base_url}/teams")
-  #   JSON.parse(response.body)
-  # rescue RestClient::Exception => e
-  #   { error: "Failed to fetch owners: #{e.message}" }
-  # end
+  def get_teams
+    response = RestClient.get("#{@base_url}/teams")
+    JSON.parse(response.body)
+  rescue RestClient::Exception => e
+    { error: "Failed to fetch owners: #{e.message}" }
+  end
 
 #   def get_owner(id)
 #     response = RestClient.get("#{@base_url}/owners/#{id}")
@@ -148,8 +148,22 @@ class CLIInterface
     end
   end
 
-  def view_all_teams
-    puts "0"
+  def view_all_owners
+    puts "\n=== All Owners ==="
+    response = @api_client.get_teams
+
+    if response.is_a?(Array)
+      if response.empty?
+        puts "No teams found."
+      else
+        response.each do |team|
+          team(team)
+          puts "-" * 50
+        end
+      end
+    else
+      puts "Error: #{response[:error]}"
+    end
   end
 
   def view_all_players
