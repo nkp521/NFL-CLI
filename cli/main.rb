@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
 
+require 'rest-client'
+require 'json'
+
 # TODO: Build your CLI application here!
 #
 class APIClient
@@ -7,12 +10,12 @@ class APIClient
     @base_url = base_url
   end
 
-  def get_teams
-    response = RestClient.get("#{@base_url}/teams")
-    JSON.parse(response.body)
-  rescue RestClient::Exception => e
-    { error: "Failed to fetch owners: #{e.message}" }
-  end
+  # def get_teams
+  #   response = RestClient.get("#{@base_url}/teams")
+  #   JSON.parse(response.body)
+  # rescue RestClient::Exception => e
+  #   { error: "Failed to fetch owners: #{e.message}" }
+  # end
 
 #   def get_owner(id)
 #     response = RestClient.get("#{@base_url}/owners/#{id}")
@@ -83,7 +86,7 @@ class APIClient
 #   rescue RestClient::Exception => e
 #     { error: "Failed to fetch owner's pets: #{e.message}" }
 #   end
-# end
+end
 
 class CLIInterface
   def initialize
@@ -146,42 +149,46 @@ class CLIInterface
   end
 
   def view_all_teams
-    gets.chomp
+    puts "0"
   end
 
   def view_all_players
-    gets.chomp
+    puts "1"
   end
 
   def create_team
-    gets.chomp
+    puts "2"
   end
 
   def create_player
-    gets.chomp
+    puts "3"
   end
 
   def update_team
-    gets.chomp
+    puts "4"
   end
 
   def update_player
-    gets.chomp
+    puts "5"
   end
 
   def delete_team
-    gets.chomp
+    puts "6"
   end
 
   def delete_player
-    gets.chomp
+    puts "7"
   end
 
   def view_players_by_team
-    gets.chomp
+    puts "8"
   end
 
   def view_team_by_player
-    gets.chomp
+    puts "9"
   end
 end
+
+# Start the CLI application
+cli = CLIInterface.new
+cli.run
