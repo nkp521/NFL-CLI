@@ -7,7 +7,7 @@ class TeamsController < ApplicationController
     teams.to_json(include: :players)
   end
 
-  # GET /players/:id
+  # GET /teams/:id
   get "/teams/:id" do
     teams = Team.find(params[:id])
     teams.to_json(include: :players)
@@ -16,6 +16,7 @@ class TeamsController < ApplicationController
     { error: "Team not found" }.to_json
   end
 
+  # POST /teams
   post "/teams" do
     team = Team.new(params)
     if team.save

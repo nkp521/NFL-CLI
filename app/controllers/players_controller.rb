@@ -24,4 +24,16 @@ class PlayersController < ApplicationController
     status 404
     { error: "Owner not found" }.to_json
   end
+
+  # POST /players
+  post "/players" do
+    player = Player.new(params)
+    if player.save
+      status 201
+      player.to_json(include: :team)
+    else
+      status 422
+      { errors: player.errors.full_messages }.to_json
+    end
+  end
 end

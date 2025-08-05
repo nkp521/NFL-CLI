@@ -45,19 +45,12 @@ class APIClient
     { error: "Failed to fetch pets: #{e.message}" }
   end
 
-  # def get_team(id)
-  #   response = RestClient.get("#{@base_url}/players/#{id}")
-  #   JSON.parse(response.body)
-  # rescue RestClient::Exception => e
-  #   { error: "Failed to fetch pet: #{e.message}" }
-  # end
-
-  #   def create_pet(data)
-  #     response = RestClient.post("#{@base_url}/pets", data.to_json, content_type: :json)
-  #     JSON.parse(response.body)
-  #   rescue RestClient::Exception => e
-  #     { error: "Failed to create pet: #{e.message}" }
-  #   end
+  def create_player(data)
+    response = RestClient.post("#{@base_url}/players", data.to_json, content_type: :json)
+    JSON.parse(response.body)
+  rescue RestClient::Exception => e
+    { error: "Failed to create player: #{e.message}" }
+  end
 
   #   def update_pet(id, data)
   #     response = RestClient.patch("#{@base_url}/pets/#{id}", data.to_json, content_type: :json)
@@ -197,7 +190,7 @@ class CLIInterface
     end
   end
 
-  def create_owner
+  def create_team
     puts "\n=== Create New Team ==="
 
     print "Name: "
@@ -208,18 +201,50 @@ class CLIInterface
 
     data = { name: name, city: city }
 
-    response = @api_client.create_owner(data)
+    response = @api_client.create_team(data)
 
     if response[:error]
       puts "Error: #{response[:error]}"
     else
-      puts "Owner created successfully!"
+      puts "Congrats on creating your own NFL Team!!"
       display_team(response)
     end
   end
 
   def create_player
-    puts "3"
+    puts "\n=== Create New Player ==="
+
+    teams_response = @api_client.get_teams
+    if teams_response.is_a?(Array) && !teams_response.empty?
+      puts "Available Teams:"
+      teams_response.each { |team| puts "#{team['id']}. #{team['name']}" }
+    else
+      puts "No Teams wish to sign you."
+      return
+    end
+
+    print "Name: "
+    name = gets.chomp
+
+    print "Number: "
+    number = gets.chomp
+
+    print "Position: "
+    position = gets.chomp
+
+    print "Team ID: "
+    team_id = gets.chomp.to_i
+
+    data = { name: name, number: number, position: position, team_id: team_id }
+
+    response = @api_client.create_player(data)
+
+    if response[:error]
+      puts "Error: #{response[:error]}"
+    else
+      puts "Congrats, Your Player is in the NFL!"
+      display_player(response)
+    end
   end
 
   def update_team
