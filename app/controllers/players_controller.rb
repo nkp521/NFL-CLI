@@ -36,4 +36,18 @@ class PlayersController < ApplicationController
       { errors: player.errors.full_messages }.to_json
     end
   end
+
+  # PATCH /pets/:id
+  patch "/players/:id" do
+    player = Player.find(params[:id])
+    if player.update(params)
+      player.to_json(include: :team)
+    else
+      status 422
+      { errors: player.errors.full_messages }.to_json
+    end
+  rescue ActiveRecord::RecordNotFound
+    status 404
+    { error: "player not found" }.to_json
+  end
 end
