@@ -1,8 +1,8 @@
 class TeamsController < ApplicationController
   set :default_content_type, "application/json"
 
-  # GET /players
-  get "/players" do
+  # GET /teams
+  get "/teams" do
     teams = Team.all
     teams.to_json(include: :players)
   end

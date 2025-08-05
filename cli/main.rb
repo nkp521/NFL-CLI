@@ -17,75 +17,75 @@ class APIClient
     { error: "Failed to fetch owners: #{e.message}" }
   end
 
-#   def get_owner(id)
-#     response = RestClient.get("#{@base_url}/owners/#{id}")
-#     JSON.parse(response.body)
-#   rescue RestClient::Exception => e
-#     { error: "Failed to fetch owner: #{e.message}" }
-#   end
+  #   def get_owner(id)
+  #     response = RestClient.get("#{@base_url}/owners/#{id}")
+  #     JSON.parse(response.body)
+  #   rescue RestClient::Exception => e
+  #     { error: "Failed to fetch owner: #{e.message}" }
+  #   end
 
-#   def create_owner(data)
-#     response = RestClient.post("#{@base_url}/owners", data.to_json, content_type: :json)
-#     JSON.parse(response.body)
-#   rescue RestClient::Exception => e
-#     { error: "Failed to create owner: #{e.message}" }
-#   end
+  #   def create_owner(data)
+  #     response = RestClient.post("#{@base_url}/owners", data.to_json, content_type: :json)
+  #     JSON.parse(response.body)
+  #   rescue RestClient::Exception => e
+  #     { error: "Failed to create owner: #{e.message}" }
+  #   end
 
-#   def update_owner(id, data)
-#     response = RestClient.patch("#{@base_url}/owners/#{id}", data.to_json, content_type: :json)
-#     JSON.parse(response.body)
-#   rescue RestClient::Exception => e
-#     { error: "Failed to update owner: #{e.message}" }
-#   end
+  #   def update_owner(id, data)
+  #     response = RestClient.patch("#{@base_url}/owners/#{id}", data.to_json, content_type: :json)
+  #     JSON.parse(response.body)
+  #   rescue RestClient::Exception => e
+  #     { error: "Failed to update owner: #{e.message}" }
+  #   end
 
-#   def delete_owner(id)
-#     response = RestClient.delete("#{@base_url}/owners/#{id}")
-#     JSON.parse(response.body)
-#   rescue RestClient::Exception => e
-#     { error: "Failed to delete owner: #{e.message}" }
-#   end
+  #   def delete_owner(id)
+  #     response = RestClient.delete("#{@base_url}/owners/#{id}")
+  #     JSON.parse(response.body)
+  #   rescue RestClient::Exception => e
+  #     { error: "Failed to delete owner: #{e.message}" }
+  #   end
 
-#   def get_pets
-#     response = RestClient.get("#{@base_url}/pets")
-#     JSON.parse(response.body)
-#   rescue RestClient::Exception => e
-#     { error: "Failed to fetch pets: #{e.message}" }
-#   end
+  #   def get_pets
+  #     response = RestClient.get("#{@base_url}/pets")
+  #     JSON.parse(response.body)
+  #   rescue RestClient::Exception => e
+  #     { error: "Failed to fetch pets: #{e.message}" }
+  #   end
 
-#   def get_pet(id)
-#     response = RestClient.get("#{@base_url}/pets/#{id}")
-#     JSON.parse(response.body)
-#   rescue RestClient::Exception => e
-#     { error: "Failed to fetch pet: #{e.message}" }
-#   end
+  #   def get_pet(id)
+  #     response = RestClient.get("#{@base_url}/pets/#{id}")
+  #     JSON.parse(response.body)
+  #   rescue RestClient::Exception => e
+  #     { error: "Failed to fetch pet: #{e.message}" }
+  #   end
 
-#   def create_pet(data)
-#     response = RestClient.post("#{@base_url}/pets", data.to_json, content_type: :json)
-#     JSON.parse(response.body)
-#   rescue RestClient::Exception => e
-#     { error: "Failed to create pet: #{e.message}" }
-#   end
+  #   def create_pet(data)
+  #     response = RestClient.post("#{@base_url}/pets", data.to_json, content_type: :json)
+  #     JSON.parse(response.body)
+  #   rescue RestClient::Exception => e
+  #     { error: "Failed to create pet: #{e.message}" }
+  #   end
 
-#   def update_pet(id, data)
-#     response = RestClient.patch("#{@base_url}/pets/#{id}", data.to_json, content_type: :json)
-#     JSON.parse(response.body)
-#   rescue RestClient::Exception => e
-#     { error: "Failed to update pet: #{e.message}" }
-#   end
+  #   def update_pet(id, data)
+  #     response = RestClient.patch("#{@base_url}/pets/#{id}", data.to_json, content_type: :json)
+  #     JSON.parse(response.body)
+  #   rescue RestClient::Exception => e
+  #     { error: "Failed to update pet: #{e.message}" }
+  #   end
 
-#   def delete_pet(id)
-#     response = RestClient.delete("#{@base_url}/pets/#{id}")
-#     JSON.parse(response.body)
-#   rescue RestClient::Exception => e
-#     { error: "Failed to delete pet: #{e.message}" }
-#   end
+  #   def delete_pet(id)
+  #     response = RestClient.delete("#{@base_url}/pets/#{id}")
+  #     JSON.parse(response.body)
+  #   rescue RestClient::Exception => e
+  #     { error: "Failed to delete pet: #{e.message}" }
+  #   end
 
-#   def get_owner_pets(owner_id)
-#     response = RestClient.get("#{@base_url}/owners/#{owner_id}/pets")
-#     JSON.parse(response.body)
-#   rescue RestClient::Exception => e
-#     { error: "Failed to fetch owner's pets: #{e.message}" }
-#   end
+  #   def get_owner_pets(owner_id)
+  #     response = RestClient.get("#{@base_url}/owners/#{owner_id}/pets")
+  #     JSON.parse(response.body)
+  #   rescue RestClient::Exception => e
+  #     { error: "Failed to fetch owner's pets: #{e.message}" }
+  #   end
 end
 
 class CLIInterface
@@ -116,6 +116,7 @@ class CLIInterface
 
     loop do
       display_menu
+      puts "Enter Your Command:"
       choice = gets.chomp.downcase
 
       case choice
@@ -148,7 +149,7 @@ class CLIInterface
     end
   end
 
-  def view_all_owners
+  def view_all_teams
     puts "\n=== All Owners ==="
     response = @api_client.get_teams
 
