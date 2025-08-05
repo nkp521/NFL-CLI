@@ -347,7 +347,7 @@ class CLIInterface
   end
 
   def show_teams_info
-    teams_response = @api_client.get_teams
+    teams_response = @api_client.show_teams
     if teams_response.is_a?(Array) && !teams_response.empty?
       puts "Available Teams:"
       teams_response.each { |team| puts "#{team['id']}. #{team['name']}" }
