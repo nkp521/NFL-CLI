@@ -80,12 +80,12 @@ class APIClient
   #     { error: "Failed to delete pet: #{e.message}" }
   #   end
 
-  #   def get_owner_pets(owner_id)
-  #     response = RestClient.get("#{@base_url}/owners/#{owner_id}/pets")
-  #     JSON.parse(response.body)
-  #   rescue RestClient::Exception => e
-  #     { error: "Failed to fetch owner's pets: #{e.message}" }
-  #   end
+  def view_players_by_team_id(team_id)
+    response = RestClient.get("#{@base_url}/teams/#{team_id}/players")
+    JSON.parse(response.body)
+  rescue RestClient::Exception => e
+    { error: "Failed to fetch owner's pets: #{e.message}" }
+  end
 end
 
 class CLIInterface
@@ -124,7 +124,7 @@ class CLIInterface
       when '2'
         view_all_players
       when '3'
-        view_player_by_team_id
+        view_players_by_team_id
       when '4'
         create_team
       when '5'
@@ -182,8 +182,26 @@ class CLIInterface
     end
   end
 
-  def view_player_by_team_id
-    puts "8"
+  def view_players_by_team_id
+    view_all_teams
+    print "\nEnter the team ID to view their players: "
+    team_id = gets.chomp.to_i
+
+    response = @api_client.view_players_by_team_id(team_id)
+
+    if response.is_a?(Array)
+      if response.empty?
+        puts "This team has no players."
+      else
+        puts "\n=== Players for this team ==="
+        response.each do |player|
+          display_team_player(player)
+          puts "-" * 50
+        end
+      end
+    else
+      puts "Error: #{response[:error]}"
+    end
   end
 
   def create_team
@@ -223,6 +241,13 @@ class CLIInterface
     puts "Number: #{player['number']}"
     puts "Position: #{player['position']}"
     puts "Team: #{player['team']['name']}"
+  end
+
+  def display_team_player(player)
+    puts "ID: #{player['id']}"
+    puts "Name: #{player['name']}"
+    puts "Number: #{player['number']}"
+    puts "Position: #{player['position']}"
   end
 end
 
