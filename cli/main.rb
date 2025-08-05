@@ -17,12 +17,12 @@ class APIClient
     { error: "Failed to fetch owners: #{e.message}" }
   end
 
-  #   def get_owner(id)
-  #     response = RestClient.get("#{@base_url}/owners/#{id}")
-  #     JSON.parse(response.body)
-  #   rescue RestClient::Exception => e
-  #     { error: "Failed to fetch owner: #{e.message}" }
-  #   end
+  def get_owner(id)
+    response = RestClient.get("#{@base_url}/owners/#{id}")
+    JSON.parse(response.body)
+  rescue RestClient::Exception => e
+    { error: "Failed to fetch owner: #{e.message}" }
+  end
 
   #   def create_owner(data)
   #     response = RestClient.post("#{@base_url}/owners", data.to_json, content_type: :json)
@@ -97,14 +97,14 @@ class CLIInterface
     puts "\n=== NFL Manager CLI ==="
     puts "0. View all teams"
     puts "1. View all players"
-    puts "2. Create a new team"
-    puts "3. Create a new player"
-    puts "4. Update a team"
-    puts "5. Update a player"
-    puts "6. Delete a team"
-    puts "7. Delete a player"
-    puts "8. View players by team"
-    puts "9. View team by player"
+    puts "2. View team by player"
+    puts "3. View players by team"
+    puts "4. Create a new team"
+    puts "5. Create a new player"
+    puts "6. Update a team"
+    puts "7. Update a player"
+    puts "8. Delete a team"
+    puts "9. Delete a player"
     puts "q. Quit"
   end
 
@@ -125,21 +125,21 @@ class CLIInterface
       when '1'
         view_all_players
       when '2'
-        create_team
-      when '3'
-        create_player
-      when '4'
-        update_team
-      when '5'
-        update_player
-      when '6'
-        delete_team
-      when '7'
-        delete_player
-      when '8'
-        view_players_by_team
-      when '9'
         view_team_by_player
+      when '3'
+        view_players_by_team
+      when '4'
+        create_team
+      when '5'
+        create_player
+      when '6'
+        update_team
+      when '7'
+        update_player
+      when '8'
+        delete_team
+      when '9'
+        delete_player
       when 'q', 'quit', 'exit'
         puts "Goodbye!"
         break
@@ -185,6 +185,14 @@ class CLIInterface
     end
   end
 
+  def view_team_by_player
+    puts "9"
+  end
+
+  def view_players_by_team
+    puts "8"
+  end
+
   def create_team
     puts "2"
   end
@@ -207,14 +215,6 @@ class CLIInterface
 
   def delete_player
     puts "7"
-  end
-
-  def view_players_by_team
-    puts "8"
-  end
-
-  def view_team_by_player
-    puts "9"
   end
 
   def display_team(team)
