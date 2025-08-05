@@ -13,6 +13,6 @@ class TeamsController < ApplicationController
     teams.to_json(include: :players)
   rescue ActiveRecord::RecordNotFound
     status 404
-    { error: "Player not found" }.to_json
+    { error: "Team not found" }.to_json
   end
 end
