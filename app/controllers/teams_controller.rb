@@ -16,6 +16,7 @@ class TeamsController < ApplicationController
     { error: "Team not found" }.to_json
   end
 
+  # POST /teams
   post "/teams" do
     team = Team.new(params)
     if team.save
