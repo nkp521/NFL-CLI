@@ -91,23 +91,23 @@ class CLIInterface
   end
 
   def display_menu
-    puts "\n=== Pet Tracker CLI ==="
-    puts "1. View all owners"
-    puts "2. View all pets"
-    puts "3. Create a new owner"
-    puts "4. Create a new pet"
-    puts "5. Update an owner"
-    puts "6. Update a pet"
-    puts "7. Delete an owner"
-    puts "8. Delete a pet"
-    puts "9. View pets by owner"
+    puts "\n=== NFL Manager CLI ==="
+    puts "0. View all teams"
+    puts "1. View all players"
+    puts "2. Create a new team"
+    puts "3. Create a new player"
+    puts "4. Update a team"
+    puts "5. Update a player"
+    puts "6. Delete a team"
+    puts "7. Delete a player"
+    puts "8. View players by team"
+    puts "9. View team by player"
     puts "q. Quit"
-    print "\nEnter your choice: "
   end
 
   def run
-    puts "Welcome to the NFL Team-Builder CLI!"
-    puts "This is a full CRUD App to build and manage new and existing teams!"
+    puts "Welcome to the NFL Manager CLI!"
+    puts "This is a full CRUD App to build and manage new and existing teams and players!"
     puts "Make sure your API server is running on http://localhost:9292"
     puts
 
@@ -142,6 +142,26 @@ class CLIInterface
       else
         puts "Invalid choice. Please try again."
       end
+    end
+  end
+
+  private
+
+    def view_all_teams
+    puts "\n=== All Teams ==="
+    response = @api_client.get_teams
+
+    if response.is_a?(Array)
+      if response.empty?
+        puts "No teams found."
+      else
+        response.each do |team|
+          display_team(team)
+          puts "-" * 50
+        end
+      end
+    else
+      puts "Error: #{response[:error]}"
     end
   end
 end
