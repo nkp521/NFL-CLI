@@ -244,10 +244,7 @@ class CLIInterface
   end
 
   def display_team_player(player)
-    puts "ID: #{player['id']}"
-    puts "Name: #{player['name']}"
-    puts "Number: #{player['number']}"
-    puts "Position: #{player['position']}"
+    puts "ID: #{player['id']}  Name: #{player['name']}  Number: #{player['number']}  Position: #{player['position']}"
   end
 end
 
