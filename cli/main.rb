@@ -150,7 +150,7 @@ class CLIInterface
   end
 
   def view_all_teams
-    puts "\n=== All Owners ==="
+    puts "\n=== All Teams ==="
     response = @api_client.get_teams
 
     if response.is_a?(Array)
@@ -158,7 +158,7 @@ class CLIInterface
         puts "No teams found."
       else
         response.each do |team|
-          team(team)
+          display_team(team)
           puts "-" * 50
         end
       end
@@ -201,6 +201,13 @@ class CLIInterface
 
   def view_team_by_player
     puts "9"
+  end
+
+  def display_team(team)
+    puts "ID: #{team['id']}"
+    puts "Name: #{team['name']}"
+    puts "City: #{team['city']}"
+    puts "Player Count: #{team['players'].count}"
   end
 end
 
