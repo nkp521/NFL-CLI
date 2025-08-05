@@ -17,12 +17,12 @@ class APIClient
     { error: "Failed to fetch owners: #{e.message}" }
   end
 
-  def get_owner(id)
-    response = RestClient.get("#{@base_url}/owners/#{id}")
-    JSON.parse(response.body)
-  rescue RestClient::Exception => e
-    { error: "Failed to fetch owner: #{e.message}" }
-  end
+  # def get_owner(id)
+  #   response = RestClient.get("#{@base_url}/owners/#{id}")
+  #   JSON.parse(response.body)
+  # rescue RestClient::Exception => e
+  #   { error: "Failed to fetch owner: #{e.message}" }
+  # end
 
   #   def create_owner(data)
   #     response = RestClient.post("#{@base_url}/owners", data.to_json, content_type: :json)
@@ -52,12 +52,12 @@ class APIClient
     { error: "Failed to fetch pets: #{e.message}" }
   end
 
-  #   def get_pet(id)
-  #     response = RestClient.get("#{@base_url}/pets/#{id}")
-  #     JSON.parse(response.body)
-  #   rescue RestClient::Exception => e
-  #     { error: "Failed to fetch pet: #{e.message}" }
-  #   end
+  # def get_team(id)
+  #   response = RestClient.get("#{@base_url}/players/#{id}")
+  #   JSON.parse(response.body)
+  # rescue RestClient::Exception => e
+  #   { error: "Failed to fetch pet: #{e.message}" }
+  # end
 
   #   def create_pet(data)
   #     response = RestClient.post("#{@base_url}/pets", data.to_json, content_type: :json)
@@ -95,10 +95,9 @@ class CLIInterface
 
   def display_menu
     puts "\n=== NFL Manager CLI ==="
-    puts "0. View all teams"
-    puts "1. View all players"
-    puts "2. View team by player"
-    puts "3. View players by team"
+    puts "1. View all teams"
+    puts "2. View all players"
+    puts "3. View players by team ID"
     puts "4. Create a new team"
     puts "5. Create a new player"
     puts "6. Update a team"
@@ -120,14 +119,12 @@ class CLIInterface
       choice = gets.chomp.downcase
 
       case choice
-      when '0'
-        view_all_teams
       when '1'
-        view_all_players
+        view_all_teams
       when '2'
-        view_team_by_player
+        view_all_players
       when '3'
-        view_players_by_team
+        view_player_by_team_id
       when '4'
         create_team
       when '5'
@@ -185,11 +182,7 @@ class CLIInterface
     end
   end
 
-  def view_team_by_player
-    puts "9"
-  end
-
-  def view_players_by_team
+  def view_player_by_team_id
     puts "8"
   end
 
