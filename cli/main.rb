@@ -10,7 +10,7 @@ class APIClient
     @base_url = base_url
   end
 
-  def get_teams
+  def show_teams
     response = RestClient.get("#{@base_url}/teams")
     JSON.parse(response.body)
   rescue RestClient::Exception => e
@@ -45,7 +45,7 @@ class APIClient
   #     { error: "Failed to delete owner: #{e.message}" }
   #   end
 
-  def get_players
+  def show_players
     response = RestClient.get("#{@base_url}/players")
     JSON.parse(response.body)
   rescue RestClient::Exception => e
@@ -59,12 +59,19 @@ class APIClient
     { error: "Failed to create Player: #{e.message}" }
   end
 
-  #   def update_pet(id, data)
-  #     response = RestClient.patch("#{@base_url}/pets/#{id}", data.to_json, content_type: :json)
-  #     JSON.parse(response.body)
-  #   rescue RestClient::Exception => e
-  #     { error: "Failed to update pet: #{e.message}" }
-  #   end
+  def get_player(id)
+    response = RestClient.get("#{@base_url}/players/#{id}")
+    JSON.parse(response.body)
+  rescue RestClient::Exception => e
+    { error: "Failed to fetch player: #{e.message}" }
+  end
+
+  def update_player(id, data)
+    response = RestClient.patch("#{@base_url}/players/#{id}", data.to_json, content_type: :json)
+    JSON.parse(response.body)
+  rescue RestClient::Exception => e
+    { error: "Failed to update pet: #{e.message}" }
+  end
 
   #   def delete_pet(id)
   #     response = RestClient.delete("#{@base_url}/pets/#{id}")
@@ -141,7 +148,7 @@ class CLIInterface
 
   def view_all_teams
     puts "\n=== All Teams ==="
-    response = @api_client.get_teams
+    response = @api_client.show_teams
 
     if response.is_a?(Array)
       if response.empty?
@@ -159,7 +166,7 @@ class CLIInterface
 
   def view_all_players
     puts "\n=== All Players ==="
-    response = @api_client.get_players
+    response = @api_client.view_players
 
     if response.is_a?(Array)
       if response.empty?
@@ -280,7 +287,36 @@ class CLIInterface
   end
 
   def trade_player
-    puts "5"
+    print "\nCheck Players by Team ID (option 3) in the Main Menu to find Players to trade "
+    print "\nEnter the ID of the Player to update: "
+    id = gets.chomp.to_i
+
+    # Get current player data
+    current_player = @api_client.get_player(id)
+    if current_player[:error]
+      puts "Error: #{current_player[:error]}"
+      return
+    end
+
+    puts "\nCurrent Player data:"
+    display_player(current_player)
+
+    puts "\nEnter new values (press Enter to keep current value):"
+
+    print "Team ID (#{current_player['team_id']}): "
+    team_id = gets.chomp
+    team_id = current_player['team_id'] if team_id.empty?
+
+    data = { team_id: team_id }
+
+    response = @api_client.update_player(id, data)
+
+    if response[:error]
+      puts "Error: #{response[:error]}"
+    else
+      puts "Player was traded!"
+      display_player(response)
+    end
   end
 
   def delete_team

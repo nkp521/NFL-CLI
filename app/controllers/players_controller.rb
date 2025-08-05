@@ -37,7 +37,7 @@ class PlayersController < ApplicationController
     end
   end
 
-  # PATCH /pets/:id
+  # PATCH /players/:id
   patch "/players/:id" do
     player = Player.find(params[:id])
     if player.update(params)
