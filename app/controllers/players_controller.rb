@@ -15,4 +15,13 @@ class PlayersController < ApplicationController
     status 404
     { error: "Player not found" }.to_json
   end
+
+  # GET /teams/:team_id/players
+  get "/teams/:team_id/players" do
+    team = Team.find(params[:team_id])
+    team.players.to_json(include: :team)
+  rescue ActiveRecord::RecordNotFound
+    status 404
+    { error: "Owner not found" }.to_json
+  end
 end

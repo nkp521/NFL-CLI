@@ -10,82 +10,75 @@ class APIClient
     @base_url = base_url
   end
 
-  # def get_teams
-  #   response = RestClient.get("#{@base_url}/teams")
+  def get_teams
+    response = RestClient.get("#{@base_url}/teams")
+    JSON.parse(response.body)
+  rescue RestClient::Exception => e
+    { error: "Failed to fetch owners: #{e.message}" }
+  end
+
+  def create_team(data)
+    response = RestClient.post("#{@base_url}/teams", data.to_json, content_type: :json)
+    JSON.parse(response.body)
+  rescue RestClient::Exception => e
+    { error: "Failed to create team: #{e.message}" }
+  end
+
+  #   def update_owner(id, data)
+  #     response = RestClient.patch("#{@base_url}/owners/#{id}", data.to_json, content_type: :json)
+  #     JSON.parse(response.body)
+  #   rescue RestClient::Exception => e
+  #     { error: "Failed to update owner: #{e.message}" }
+  #   end
+
+  #   def delete_owner(id)
+  #     response = RestClient.delete("#{@base_url}/owners/#{id}")
+  #     JSON.parse(response.body)
+  #   rescue RestClient::Exception => e
+  #     { error: "Failed to delete owner: #{e.message}" }
+  #   end
+
+  def get_players
+    response = RestClient.get("#{@base_url}/players")
+    JSON.parse(response.body)
+  rescue RestClient::Exception => e
+    { error: "Failed to fetch pets: #{e.message}" }
+  end
+
+  # def get_team(id)
+  #   response = RestClient.get("#{@base_url}/players/#{id}")
   #   JSON.parse(response.body)
   # rescue RestClient::Exception => e
-  #   { error: "Failed to fetch owners: #{e.message}" }
+  #   { error: "Failed to fetch pet: #{e.message}" }
   # end
 
-#   def get_owner(id)
-#     response = RestClient.get("#{@base_url}/owners/#{id}")
-#     JSON.parse(response.body)
-#   rescue RestClient::Exception => e
-#     { error: "Failed to fetch owner: #{e.message}" }
-#   end
+  #   def create_pet(data)
+  #     response = RestClient.post("#{@base_url}/pets", data.to_json, content_type: :json)
+  #     JSON.parse(response.body)
+  #   rescue RestClient::Exception => e
+  #     { error: "Failed to create pet: #{e.message}" }
+  #   end
 
-#   def create_owner(data)
-#     response = RestClient.post("#{@base_url}/owners", data.to_json, content_type: :json)
-#     JSON.parse(response.body)
-#   rescue RestClient::Exception => e
-#     { error: "Failed to create owner: #{e.message}" }
-#   end
+  #   def update_pet(id, data)
+  #     response = RestClient.patch("#{@base_url}/pets/#{id}", data.to_json, content_type: :json)
+  #     JSON.parse(response.body)
+  #   rescue RestClient::Exception => e
+  #     { error: "Failed to update pet: #{e.message}" }
+  #   end
 
-#   def update_owner(id, data)
-#     response = RestClient.patch("#{@base_url}/owners/#{id}", data.to_json, content_type: :json)
-#     JSON.parse(response.body)
-#   rescue RestClient::Exception => e
-#     { error: "Failed to update owner: #{e.message}" }
-#   end
+  #   def delete_pet(id)
+  #     response = RestClient.delete("#{@base_url}/pets/#{id}")
+  #     JSON.parse(response.body)
+  #   rescue RestClient::Exception => e
+  #     { error: "Failed to delete pet: #{e.message}" }
+  #   end
 
-#   def delete_owner(id)
-#     response = RestClient.delete("#{@base_url}/owners/#{id}")
-#     JSON.parse(response.body)
-#   rescue RestClient::Exception => e
-#     { error: "Failed to delete owner: #{e.message}" }
-#   end
-
-#   def get_pets
-#     response = RestClient.get("#{@base_url}/pets")
-#     JSON.parse(response.body)
-#   rescue RestClient::Exception => e
-#     { error: "Failed to fetch pets: #{e.message}" }
-#   end
-
-#   def get_pet(id)
-#     response = RestClient.get("#{@base_url}/pets/#{id}")
-#     JSON.parse(response.body)
-#   rescue RestClient::Exception => e
-#     { error: "Failed to fetch pet: #{e.message}" }
-#   end
-
-#   def create_pet(data)
-#     response = RestClient.post("#{@base_url}/pets", data.to_json, content_type: :json)
-#     JSON.parse(response.body)
-#   rescue RestClient::Exception => e
-#     { error: "Failed to create pet: #{e.message}" }
-#   end
-
-#   def update_pet(id, data)
-#     response = RestClient.patch("#{@base_url}/pets/#{id}", data.to_json, content_type: :json)
-#     JSON.parse(response.body)
-#   rescue RestClient::Exception => e
-#     { error: "Failed to update pet: #{e.message}" }
-#   end
-
-#   def delete_pet(id)
-#     response = RestClient.delete("#{@base_url}/pets/#{id}")
-#     JSON.parse(response.body)
-#   rescue RestClient::Exception => e
-#     { error: "Failed to delete pet: #{e.message}" }
-#   end
-
-#   def get_owner_pets(owner_id)
-#     response = RestClient.get("#{@base_url}/owners/#{owner_id}/pets")
-#     JSON.parse(response.body)
-#   rescue RestClient::Exception => e
-#     { error: "Failed to fetch owner's pets: #{e.message}" }
-#   end
+  def view_players_by_team_id(team_id)
+    response = RestClient.get("#{@base_url}/teams/#{team_id}/players")
+    JSON.parse(response.body)
+  rescue RestClient::Exception => e
+    { error: "Failed to fetch owner's pets: #{e.message}" }
+  end
 end
 
 class CLIInterface
@@ -95,16 +88,15 @@ class CLIInterface
 
   def display_menu
     puts "\n=== NFL Manager CLI ==="
-    puts "0. View all teams"
-    puts "1. View all players"
-    puts "2. Create a new team"
-    puts "3. Create a new player"
-    puts "4. Update a team"
-    puts "5. Update a player"
-    puts "6. Delete a team"
-    puts "7. Delete a player"
-    puts "8. View players by team"
-    puts "9. View team by player"
+    puts "1. View all teams"
+    puts "2. View all players"
+    puts "3. View players by team ID"
+    puts "4. Create a new team"
+    puts "5. Create a new player"
+    puts "6. Update a team"
+    puts "7. Update a player"
+    puts "8. Delete a team"
+    puts "9. Delete a player"
     puts "q. Quit"
   end
 
@@ -116,29 +108,28 @@ class CLIInterface
 
     loop do
       display_menu
+      puts "Enter Your Command:"
       choice = gets.chomp.downcase
 
       case choice
-      when '0'
-        view_all_teams
       when '1'
-        view_all_players
+        view_all_teams
       when '2'
-        create_team
+        view_all_players
       when '3'
-        create_player
+        view_players_by_team_id
       when '4'
-        update_team
+        create_team
       when '5'
-        update_player
+        create_player
       when '6'
-        delete_team
+        update_team
       when '7'
-        delete_player
+        update_player
       when '8'
-        view_players_by_team
+        delete_team
       when '9'
-        view_team_by_player
+        delete_player
       when 'q', 'quit', 'exit'
         puts "Goodbye!"
         break
@@ -149,15 +140,82 @@ class CLIInterface
   end
 
   def view_all_teams
-    puts "0"
+    puts "\n=== All Teams ==="
+    response = @api_client.get_teams
+
+    if response.is_a?(Array)
+      if response.empty?
+        puts "No teams found."
+      else
+        response.each do |team|
+          display_team(team)
+          puts "-" * 75
+        end
+      end
+    else
+      puts "Error: #{response[:error]}"
+    end
   end
 
   def view_all_players
-    puts "1"
+    puts "\n=== All Players ==="
+    response = @api_client.get_players
+
+    if response.is_a?(Array)
+      if response.empty?
+        puts "No players found."
+      else
+        response.each do |player|
+          display_player(player)
+          puts "-" * 50
+        end
+      end
+    else
+      puts "Error: #{response[:error]}"
+    end
   end
 
-  def create_team
-    puts "2"
+  def view_players_by_team_id
+    view_all_teams
+    print "\nEnter the team ID to view their players: "
+    team_id = gets.chomp.to_i
+
+    response = @api_client.view_players_by_team_id(team_id)
+
+    if response.is_a?(Array)
+      if response.empty?
+        puts "This team has no players."
+      else
+        puts "\n=== Players for this team ==="
+        response.each do |player|
+          display_team_player(player)
+          puts "-" * 50
+        end
+      end
+    else
+      puts "Error: #{response[:error]}"
+    end
+  end
+
+  def create_owner
+    puts "\n=== Create New Team ==="
+
+    print "Name: "
+    name = gets.chomp
+
+    print "City: "
+    city = gets.chomp
+
+    data = { name: name, city: city }
+
+    response = @api_client.create_owner(data)
+
+    if response[:error]
+      puts "Error: #{response[:error]}"
+    else
+      puts "Owner created successfully!"
+      display_team(response)
+    end
   end
 
   def create_player
@@ -180,12 +238,23 @@ class CLIInterface
     puts "7"
   end
 
-  def view_players_by_team
-    puts "8"
+  def display_team(team)
+    puts "ID: #{team['id']}"
+    puts "Name: #{team['name']}"
+    puts "City: #{team['city']}"
+    puts "Player Count: #{team['players'].count}"
   end
 
-  def view_team_by_player
-    puts "9"
+  def display_player(player)
+    puts "ID: #{player['id']}"
+    puts "Name: #{player['name']}"
+    puts "Number: #{player['number']}"
+    puts "Position: #{player['position']}"
+    puts "Team: #{player['team']['name']}"
+  end
+
+  def display_team_player(player)
+    puts "ID: #{player['id']}  Name: #{player['name']}  Number: #{player['number']}  Position: #{player['position']}"
   end
 end
 
