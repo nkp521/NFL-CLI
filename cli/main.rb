@@ -10,26 +10,33 @@ class APIClient
     @base_url = base_url
   end
 
-  def get_teams
+  def show_teams
     response = RestClient.get("#{@base_url}/teams")
     JSON.parse(response.body)
   rescue RestClient::Exception => e
-    { error: "Failed to fetch owners: #{e.message}" }
+    { error: "Failed to fetch Owners: #{e.message}" }
   end
 
   def create_team(data)
     response = RestClient.post("#{@base_url}/teams", data.to_json, content_type: :json)
     JSON.parse(response.body)
   rescue RestClient::Exception => e
-    { error: "Failed to create team: #{e.message}" }
+    { error: "Failed to create Team: #{e.message}" }
   end
 
-  #   def update_owner(id, data)
-  #     response = RestClient.patch("#{@base_url}/owners/#{id}", data.to_json, content_type: :json)
-  #     JSON.parse(response.body)
-  #   rescue RestClient::Exception => e
-  #     { error: "Failed to update owner: #{e.message}" }
-  #   end
+  def get_team(id)
+    response = RestClient.get("#{@base_url}/teams/#{id}")
+    JSON.parse(response.body)
+  rescue RestClient::Exception => e
+    { error: "Failed to fetch team: #{e.message}" }
+  end
+
+  def update_team(id, data)
+    response = RestClient.patch("#{@base_url}/teams/#{id}", data.to_json, content_type: :json)
+    JSON.parse(response.body)
+  rescue RestClient::Exception => e
+    { error: "Failed to move Team: #{e.message}" }
+  end
 
   #   def delete_owner(id)
   #     response = RestClient.delete("#{@base_url}/owners/#{id}")
@@ -38,26 +45,33 @@ class APIClient
   #     { error: "Failed to delete owner: #{e.message}" }
   #   end
 
-  def get_players
+  def show_players
     response = RestClient.get("#{@base_url}/players")
     JSON.parse(response.body)
   rescue RestClient::Exception => e
-    { error: "Failed to fetch pets: #{e.message}" }
+    { error: "Failed to fetch Players: #{e.message}" }
   end
 
   def create_player(data)
     response = RestClient.post("#{@base_url}/players", data.to_json, content_type: :json)
     JSON.parse(response.body)
   rescue RestClient::Exception => e
-    { error: "Failed to create player: #{e.message}" }
+    { error: "Failed to create Player: #{e.message}" }
   end
 
-  #   def update_pet(id, data)
-  #     response = RestClient.patch("#{@base_url}/pets/#{id}", data.to_json, content_type: :json)
-  #     JSON.parse(response.body)
-  #   rescue RestClient::Exception => e
-  #     { error: "Failed to update pet: #{e.message}" }
-  #   end
+  def get_player(id)
+    response = RestClient.get("#{@base_url}/players/#{id}")
+    JSON.parse(response.body)
+  rescue RestClient::Exception => e
+    { error: "Failed to fetch player: #{e.message}" }
+  end
+
+  def update_player(id, data)
+    response = RestClient.patch("#{@base_url}/players/#{id}", data.to_json, content_type: :json)
+    JSON.parse(response.body)
+  rescue RestClient::Exception => e
+    { error: "Failed to update pet: #{e.message}" }
+  end
 
   #   def delete_pet(id)
   #     response = RestClient.delete("#{@base_url}/pets/#{id}")
@@ -70,7 +84,7 @@ class APIClient
     response = RestClient.get("#{@base_url}/teams/#{team_id}/players")
     JSON.parse(response.body)
   rescue RestClient::Exception => e
-    { error: "Failed to fetch owner's pets: #{e.message}" }
+    { error: "Failed to fetch Team's Players: #{e.message}" }
   end
 end
 
@@ -86,8 +100,8 @@ class CLIInterface
     puts "3. View players by team ID"
     puts "4. Create a new team"
     puts "5. Create a new player"
-    puts "6. Update a team"
-    puts "7. Update a player"
+    puts "6. Move Team Location"
+    puts "7. Trade a Player"
     puts "8. Delete a team"
     puts "9. Delete a player"
     puts "q. Quit"
@@ -116,9 +130,9 @@ class CLIInterface
       when '5'
         create_player
       when '6'
-        update_team
+        move_team_location
       when '7'
-        update_player
+        trade_player
       when '8'
         delete_team
       when '9'
@@ -134,7 +148,7 @@ class CLIInterface
 
   def view_all_teams
     puts "\n=== All Teams ==="
-    response = @api_client.get_teams
+    response = @api_client.show_teams
 
     if response.is_a?(Array)
       if response.empty?
@@ -152,7 +166,7 @@ class CLIInterface
 
   def view_all_players
     puts "\n=== All Players ==="
-    response = @api_client.get_players
+    response = @api_client.view_players
 
     if response.is_a?(Array)
       if response.empty?
@@ -214,20 +228,13 @@ class CLIInterface
   def create_player
     puts "\n=== Create New Player ==="
 
-    teams_response = @api_client.get_teams
-    if teams_response.is_a?(Array) && !teams_response.empty?
-      puts "Available Teams:"
-      teams_response.each { |team| puts "#{team['id']}. #{team['name']}" }
-    else
-      puts "No Teams wish to sign you."
-      return
-    end
+    show_teams_info
 
     print "Name: "
     name = gets.chomp
 
     print "Number: "
-    number = gets.chomp
+    number = gets.chomp.to_i
 
     print "Position: "
     position = gets.chomp
@@ -247,12 +254,69 @@ class CLIInterface
     end
   end
 
-  def update_team
-    puts "4"
+  def move_team_location
+    show_teams_info
+    print "\nEnter the ID of the Team to move location: "
+    id = gets.chomp.to_i
+
+    team = @api_client.get_team(id)
+    if team[:error]
+      puts "Error: #{team[:error]}"
+      return
+    end
+
+    puts "\nCurrent Team data:"
+    display_team(team)
+
+    puts "\nEnter new city (press Enter to keep current city):"
+
+    print "City (#{team['city']}): "
+    city = gets.chomp
+    city = team['city'] if city.empty?
+
+    data = { city: city }
+
+    response = @api_client.update_team(id, data)
+
+    if response[:error]
+      puts "Error: #{response[:error]}"
+    else
+      puts "Team location updated successfully!"
+      display_team(response)
+    end
   end
 
-  def update_player
-    puts "5"
+  def trade_player
+    print "\nCheck Players by Team ID (option 3) in the Main Menu to find Players to trade "
+    print "\nEnter the ID of the Player to update: "
+    id = gets.chomp.to_i
+
+    # Get current player data
+    current_player = @api_client.get_player(id)
+    if current_player[:error]
+      puts "Error: #{current_player[:error]}"
+      return
+    end
+
+    puts "\nCurrent Player data:"
+    display_player(current_player)
+
+    puts "\nEnter new values (press Enter to keep current value):"
+
+    print "Team ID (#{current_player['team_id']}): "
+    team_id = gets.chomp
+    team_id = current_player['team_id'] if team_id.empty?
+
+    data = { team_id: team_id }
+
+    response = @api_client.update_player(id, data)
+
+    if response[:error]
+      puts "Error: #{response[:error]}"
+    else
+      puts "Player was traded!"
+      display_player(response)
+    end
   end
 
   def delete_team
@@ -280,6 +344,17 @@ class CLIInterface
 
   def display_team_player(player)
     puts "ID: #{player['id']}  Name: #{player['name']}  Number: #{player['number']}  Position: #{player['position']}"
+  end
+
+  def show_teams_info
+    teams_response = @api_client.show_teams
+    if teams_response.is_a?(Array) && !teams_response.empty?
+      puts "Available Teams:"
+      teams_response.each { |team| puts "#{team['id']}. #{team['name']}" }
+    else
+      puts "No Teams avilable."
+      nil
+    end
   end
 end
 

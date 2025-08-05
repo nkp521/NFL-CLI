@@ -27,4 +27,18 @@ class TeamsController < ApplicationController
       { errors: team.errors.full_messages }.to_json
     end
   end
+
+  # PATCH /teams/:id
+  patch "/teams/:id" do
+    team = Team.find(params[:id])
+    if team.update(params)
+      team.to_json(include: :players)
+    else
+      status 422
+      { errors: team.errors.full_messages }.to_json
+    end
+  rescue ActiveRecord::RecordNotFound
+    status 404
+    { error: "Teams aren't open for relocation" }.to_json
+  end
 end
