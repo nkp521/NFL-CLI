@@ -13,5 +13,9 @@ end
 # Parse JSON from the request body into the params hash
 use Rack::JSONBodyParser
 
-# Our application
+# Mount controllers
+use PlayersController
+use TeamsController
+
+# Main application
 run ApplicationController
