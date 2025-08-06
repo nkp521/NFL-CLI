@@ -29,7 +29,6 @@ class DisplayHelper
       teams_response.each { |team| puts "#{team['id']}. #{team['name']} || Player Count: #{team['players'].count}" }
     else
       puts "No Teams available."
-      nil
     end
   end
 end
