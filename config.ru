@@ -7,12 +7,12 @@ use Rack::Cors do
   end
 end
 
-
 use Rack::JSONBodyParser
 
 # Mount modular controllers
 use PlayersController
 use TeamsController
+use PositionsController
 
 # Run application
 run ApplicationController

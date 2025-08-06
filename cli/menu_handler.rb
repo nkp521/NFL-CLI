@@ -14,6 +14,7 @@ class MenuHandler
     puts "7. Trade a Player"
     puts "8. Delete a team"
     puts "9. Delete a player"
+    puts "0. Position Information"
     puts "q. Quit"
   end
 
@@ -37,6 +38,8 @@ class MenuHandler
       @cli_interface.delete_team
     when '9'
       @cli_interface.delete_player
+    when '0'
+      @cli_interface.position_info
     when 'q', 'quit', 'exit'
       puts "Goodbye!"
       return :quit

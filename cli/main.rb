@@ -36,12 +36,12 @@ class APIClient
     { error: "Failed to move Team: #{e.message}" }
   end
 
-    def delete_team(id)
-      response = RestClient.delete("#{@base_url}/teams/#{id}")
-      JSON.parse(response.body)
-    rescue RestClient::Exception => e
-      { error: "Failed to delete team: #{e.message}" }
-    end
+  def delete_team(id)
+    response = RestClient.delete("#{@base_url}/teams/#{id}")
+    JSON.parse(response.body)
+  rescue RestClient::Exception => e
+    { error: "Failed to delete team: #{e.message}" }
+  end
 
   def show_players
     response = RestClient.get("#{@base_url}/players")
@@ -71,18 +71,25 @@ class APIClient
     { error: "Failed to update pet: #{e.message}" }
   end
 
-    def delete_pet(id)
-      response = RestClient.delete("#{@base_url}/players/#{id}")
-      JSON.parse(response.body)
-    rescue RestClient::Exception => e
-      { error: "Failed to delete player: #{e.message}" }
-    end
+  def delete_pet(id)
+    response = RestClient.delete("#{@base_url}/players/#{id}")
+    JSON.parse(response.body)
+  rescue RestClient::Exception => e
+    { error: "Failed to delete player: #{e.message}" }
+  end
 
   def view_players_by_team_id(team_id)
     response = RestClient.get("#{@base_url}/teams/#{team_id}/players")
     JSON.parse(response.body)
   rescue RestClient::Exception => e
     { error: "Failed to fetch Team's Players: #{e.message}" }
+  end
+
+  def show_positions
+    response = RestClient.get("#{@base_url}/positions")
+    JSON.parse(response.body)
+  rescue RestClient::Exception => e
+    { error: "Failed to fetch Owners: #{e.message}" }
   end
 end
 
@@ -286,7 +293,7 @@ class CLIInterface
     print "Are you sure you want to delete this team? It will delete all players associated with it! (y/n): "
     confirmation = gets.chomp.downcase
 
-    if confirmation == 'y' || confirmation == 'yes'
+    if %w[y yes].include?(confirmation)
       response = @api_client.delete_team(id)
 
       if response[:error]
@@ -305,7 +312,7 @@ class CLIInterface
     team_id = gets.chomp.to_i
 
     response = @api_client.view_players_by_team_id(team_id)
-    
+
     if response.is_a?(Array)
       if response.empty?
         puts "This team has no players to delete."
@@ -328,7 +335,7 @@ class CLIInterface
     print "Are you sure you want to delete this player? (y/n): "
     confirmation = gets.chomp.downcase
 
-    if confirmation == 'y' || confirmation == 'yes'
+    if %w[y yes].include?(confirmation)
       response = @api_client.delete_pet(player_id)
 
       if response[:error]
@@ -338,6 +345,24 @@ class CLIInterface
       end
     else
       puts "Player Removal Cancelled."
+    end
+  end
+
+  def position_info
+    puts "\n=== All Players ==="
+    response = @api_client.show_positions
+
+    if response.is_a?(Array)
+      if response.empty?
+        puts "No positions found."
+      else
+        response.each do |position|
+          @display.display_position(position)
+          puts "-" * 50
+        end
+      end
+    else
+      puts "Error: #{response[:error]}"
     end
   end
 end
