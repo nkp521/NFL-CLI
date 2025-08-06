@@ -36,7 +36,7 @@ class MenuHandler
     case choice
     when :view_teams
       @cli_interface.view_all_teams
-    when :view_players
+    when :view_players_by_name
       @cli_interface.view_all_players_by_name
     when :view_players_by_team
       @cli_interface.view_players_by_team_id

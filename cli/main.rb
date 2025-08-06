@@ -129,16 +129,23 @@ class CLIInterface
 
   def view_all_players_by_name
     puts "\n=== Enter a name to find players ==="
-    player_name = gets.chomp.to_i
+    print "Player name: "
+    player_name = gets.chomp.downcase
+
     response = @api_client.show_players
 
     if response.is_a?(Array)
-      if response.empty?
-        puts "No players found."
+      matching_players = response.select do |player|
+        player['name'].downcase.include?(player_name)
+      end
+
+      if matching_players.empty?
+        puts "No players found matching '#{player_name}'."
       else
-        response.each do |player|
+        puts "\n=== Players matching '#{player_name}' ==="
+        matching_players.each do |player|
           @display.display_player(player)
-          puts "-" * 50
+          puts "-" * 80
         end
       end
     else
@@ -155,12 +162,12 @@ class CLIInterface
 
     if response.is_a?(Array)
       if response.empty?
-        puts "This team has no players."
+        puts "This team has no players"
       else
         puts "\n=== Players for this team ==="
         response.each do |player|
           @display.display_team_player(player)
-          puts "-" * 50
+          puts "-" * 80
         end
       end
     else
