@@ -1,4 +1,5 @@
 require 'tty-prompt'
+require 'tty-spinner'
 
 class MenuHandler
   def initialize(cli_interface)
@@ -7,10 +8,14 @@ class MenuHandler
   end
 
   def display_and_handle_menu
-    puts "\n🏈 NFL Manager CLI 🏈"
-    puts "─" * 50
+    football_frames = ["🏈", "🏉", "🏈", "🏉"]
+    spinner = TTY::Spinner.new(":spinner NFL CLI MANAGER :spinner", format: :custom, frames: football_frames,
+                                                                    interval: 175)
+    spinner.auto_spin
+    sleep(1.5)
+    spinner.stop
 
-    choice = @prompt.select("What would you like to do?", cycle: true, per_page: 12) do |t|
+    choice = @prompt.select("\nWhat would you like to do?\n", cycle: true, per_page: 12) do |t|
       t.choice "View all teams", :view_teams
       t.choice "Find Player by Name", :view_players
       t.choice "View players by team", :view_players_by_team
