@@ -37,6 +37,8 @@ class MenuHandler
       @cli_interface.delete_team
     when '9'
       @cli_interface.delete_player
+    when '0'
+      @cli_interface.position_info
     when 'q', 'quit', 'exit'
       puts "Goodbye!"
       return :quit
