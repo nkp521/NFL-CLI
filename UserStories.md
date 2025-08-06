@@ -99,3 +99,12 @@ As a user, I want to manage positions in a separate table so they can be reused 
 
 **Details**  
 Use a `positions` table with many-to-many association with players.
+
+require "bundler/gem_tasks"
+
+FileList['tasks/**/*.rake'].each(&method(:import))
+
+desc 'Run all specs'
+task ci: %w[ spec ]
+
+task default: :spec
