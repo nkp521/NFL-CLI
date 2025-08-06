@@ -50,4 +50,14 @@ class PlayersController < ApplicationController
     status 404
     { error: "player not found" }.to_json
   end
+
+  # DELETE /players/:id
+  delete "/players/:id" do
+    player = Player.find(params[:id])
+    player.destroy
+    { message: "Player successfully removed" }.to_json
+  rescue ActiveRecord::RecordNotFound
+    status 404
+    { error: "Player not found" }.to_json
+  end
 end
