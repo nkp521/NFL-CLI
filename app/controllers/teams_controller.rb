@@ -41,4 +41,14 @@ class TeamsController < ApplicationController
     status 404
     { error: "Teams aren't open for relocation" }.to_json
   end
+
+  # DELETE /teams/:id
+  delete "/teams/:id" do
+    team = Team.find(params[:id])
+    team.destroy
+    { message: "Team successfully dissolved" }.to_json
+  rescue ActiveRecord::RecordNotFound
+    status 404
+    { error: "Team not found" }.to_json
+  end
 end
