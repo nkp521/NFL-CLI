@@ -38,12 +38,12 @@ class APIClient
     { error: "Failed to move Team: #{e.message}" }
   end
 
-  #   def delete_owner(id)
-  #     response = RestClient.delete("#{@base_url}/owners/#{id}")
-  #     JSON.parse(response.body)
-  #   rescue RestClient::Exception => e
-  #     { error: "Failed to delete owner: #{e.message}" }
-  #   end
+    def delete_team(id)
+      response = RestClient.delete("#{@base_url}/teams/#{id}")
+      JSON.parse(response.body)
+    rescue RestClient::Exception => e
+      { error: "Failed to delete team: #{e.message}" }
+    end
 
   def show_players
     response = RestClient.get("#{@base_url}/players")
