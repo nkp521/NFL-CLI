@@ -14,12 +14,12 @@ class DisplayHelper
     puts "ID: #{player['id']}"
     puts "Name: #{player['name']}"
     puts "Number: #{player['number']}"
-    puts "Position: #{player['position']}"
+    puts "Position: #{player['position']['name']}"
     puts "Team: #{player['team']['name']}"
   end
 
   def display_team_player(player)
-    puts "ID: #{player['id']}  Name: #{player['name']}  Number: #{player['number']}  Position: #{player['position']}"
+    puts "ID: #{player['id']}  Name: #{player['name']}  Number: #{player['number']}  Position: #{player['position']['name']}"
   end
 
   def show_teams_info
