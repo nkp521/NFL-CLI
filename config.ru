@@ -10,7 +10,9 @@ end
 
 use Rack::JSONBodyParser
 
+# Mount modular controllers
 use PlayersController
 use TeamsController
 
+# Run application
 run ApplicationController
