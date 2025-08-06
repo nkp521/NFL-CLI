@@ -1,9 +1,8 @@
-#!/usr/bin/env ruby
 require 'rest-client'
 require 'json'
+require_relative 'menu_handler'
+require_relative 'display_helper'
 
-# TODO: Build your CLI application here!
-#
 class APIClient
   def initialize(base_url = 'http://localhost:9292')
     @base_url = base_url
@@ -90,58 +89,20 @@ end
 class CLIInterface
   def initialize
     @api_client = APIClient.new
-  end
-
-  def display_menu
-    puts "\n=== NFL Manager CLI ==="
-    puts "1. View all teams"
-    puts "2. View all players"
-    puts "3. View players by team ID"
-    puts "4. Create a new team"
-    puts "5. Create a new player"
-    puts "6. Move Team Location"
-    puts "7. Trade a Player"
-    puts "8. Delete a team"
-    puts "9. Delete a player"
-    puts "q. Quit"
+    @menu_handler = MenuHandler.new(self)
+    @display = DisplayHelper.new(@api_client)
   end
 
   def run
-    puts "Welcome to the NFL Manager CLI!"
-    puts "This is a full CRUD App to build and manage new and existing teams and players!"
-    puts "Make sure your API server is running on http://localhost:9292"
-    puts
+    @menu_handler.show_welcome_message
 
     loop do
-      display_menu
+      @menu_handler.display_menu
       puts "Enter Your Command:"
       choice = gets.chomp.downcase
 
-      case choice
-      when '1'
-        view_all_teams
-      when '2'
-        view_all_players
-      when '3'
-        view_players_by_team_id
-      when '4'
-        create_team
-      when '5'
-        create_player
-      when '6'
-        move_team_location
-      when '7'
-        trade_player
-      when '8'
-        delete_team
-      when '9'
-        delete_player
-      when 'q', 'quit', 'exit'
-        puts "Goodbye!"
-        break
-      else
-        puts "Invalid choice. Please try again."
-      end
+      result = @menu_handler.handle_choice(choice)
+      break if result == :quit
     end
   end
 
@@ -154,7 +115,7 @@ class CLIInterface
         puts "No teams found."
       else
         response.each do |team|
-          display_team(team)
+          @display.display_team(team)
           puts "-" * 75
         end
       end
@@ -172,7 +133,7 @@ class CLIInterface
         puts "No players found."
       else
         response.each do |player|
-          display_player(player)
+          @display.display_player(player)
           puts "-" * 50
         end
       end
@@ -182,7 +143,7 @@ class CLIInterface
   end
 
   def view_players_by_team_id
-    view_all_teams
+    @display.show_teams_info
     print "\nEnter the team ID to view their players: "
     team_id = gets.chomp.to_i
 
@@ -194,7 +155,7 @@ class CLIInterface
       else
         puts "\n=== Players for this team ==="
         response.each do |player|
-          display_team_player(player)
+          @display.display_team_player(player)
           puts "-" * 50
         end
       end
@@ -220,14 +181,14 @@ class CLIInterface
       puts "Error: #{response[:error]}"
     else
       puts "Congrats on creating your own NFL Team!!"
-      display_team(response)
+      @display.display_team(response)
     end
   end
 
   def create_player
     puts "\n=== Create New Player ==="
 
-    show_teams_info
+    @display.show_teams_info
 
     print "Name: "
     name = gets.chomp
@@ -249,12 +210,12 @@ class CLIInterface
       puts "Error: #{response[:error]}"
     else
       puts "Congrats, Your Player is in the NFL!"
-      display_player(response)
+      @display.display_player(response)
     end
   end
 
   def move_team_location
-    show_teams_info
+    @display.show_teams_info
     print "\nEnter the ID of the Team to move location: "
     id = gets.chomp.to_i
 
@@ -265,7 +226,7 @@ class CLIInterface
     end
 
     puts "\nCurrent Team data:"
-    display_team(team)
+    @display.display_team(team)
 
     puts "\nEnter new city (press Enter to keep current city):"
 
@@ -281,7 +242,7 @@ class CLIInterface
       puts "Error: #{response[:error]}"
     else
       puts "Team location updated successfully!"
-      display_team(response)
+      @display.display_team(response)
     end
   end
 
@@ -290,7 +251,6 @@ class CLIInterface
     print "\nEnter the ID of the Player to update: "
     id = gets.chomp.to_i
 
-    # Get current player data
     current_player = @api_client.get_player(id)
     if current_player[:error]
       puts "Error: #{current_player[:error]}"
@@ -298,7 +258,7 @@ class CLIInterface
     end
 
     puts "\nCurrent Player data:"
-    display_player(current_player)
+    @display.display_player(current_player)
 
     puts "\nEnter new values (press Enter to keep current value):"
 
@@ -314,12 +274,12 @@ class CLIInterface
       puts "Error: #{response[:error]}"
     else
       puts "Player was traded!"
-      display_player(response)
+      @display.display_player(response)
     end
   end
 
   def delete_team
-    show_teams_info
+    @display.show_teams_info
     print "\nEnter the ID of the team to delete: "
     id = gets.chomp.to_i
 
@@ -340,12 +300,10 @@ class CLIInterface
   end
 
   def delete_player
-    # First, show all teams so user can select one
     view_all_teams
     print "\nEnter the ID of the Team to view players: "
     team_id = gets.chomp.to_i
 
-    # Show players from the selected team
     response = @api_client.view_players_by_team_id(team_id)
     
     if response.is_a?(Array)
@@ -355,7 +313,7 @@ class CLIInterface
       else
         puts "\n=== Players on this team ==="
         response.each do |player|
-          display_team_player(player)
+          @display.display_team_player(player)
           puts "-" * 50
         end
       end
@@ -364,7 +322,6 @@ class CLIInterface
       return
     end
 
-    # Ask user to select a player to delete
     print "\nEnter the ID of the Player to delete: "
     player_id = gets.chomp.to_i
 
@@ -383,38 +340,7 @@ class CLIInterface
       puts "Player Removal Cancelled."
     end
   end
-
-  def display_team(team)
-    puts "ID: #{team['id']}"
-    puts "Name: #{team['name']}"
-    puts "City: #{team['city']}"
-    puts "Player Count: #{team['players'].count}"
-  end
-
-  def display_player(player)
-    puts "ID: #{player['id']}"
-    puts "Name: #{player['name']}"
-    puts "Number: #{player['number']}"
-    puts "Position: #{player['position']}"
-    puts "Team: #{player['team']['name']}"
-  end
-
-  def display_team_player(player)
-    puts "ID: #{player['id']}  Name: #{player['name']}  Number: #{player['number']}  Position: #{player['position']}"
-  end
-
-  def show_teams_info
-    teams_response = @api_client.show_teams
-    if teams_response.is_a?(Array) && !teams_response.empty?
-      puts "Available Teams:"
-      teams_response.each { |team| puts "#{team['id']}. #{team['name']}" }
-    else
-      puts "No Teams avilable."
-      nil
-    end
-  end
 end
 
-# Start the CLI application
 cli = CLIInterface.new
 cli.run

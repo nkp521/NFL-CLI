@@ -1,13 +1,11 @@
 class TeamsController < ApplicationController
   set :default_content_type, "application/json"
 
-  # GET /teams
   get "/teams" do
     teams = Team.all
     teams.to_json(include: :players)
   end
 
-  # GET /teams/:id
   get "/teams/:id" do
     teams = Team.find(params[:id])
     teams.to_json(include: :players)
@@ -16,7 +14,6 @@ class TeamsController < ApplicationController
     { error: "Team not found" }.to_json
   end
 
-  # POST /teams
   post "/teams" do
     team = Team.new(params)
     if team.save
@@ -28,7 +25,6 @@ class TeamsController < ApplicationController
     end
   end
 
-  # PATCH /teams/:id
   patch "/teams/:id" do
     team = Team.find(params[:id])
     if team.update(params)
@@ -42,7 +38,6 @@ class TeamsController < ApplicationController
     { error: "Teams aren't open for relocation" }.to_json
   end
 
-  # DELETE /teams/:id
   delete "/teams/:id" do
     team = Team.find(params[:id])
     team.destroy
