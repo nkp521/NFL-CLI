@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-
 require 'rest-client'
 require 'json'
 
@@ -73,12 +72,12 @@ class APIClient
     { error: "Failed to update pet: #{e.message}" }
   end
 
-  #   def delete_pet(id)
-  #     response = RestClient.delete("#{@base_url}/pets/#{id}")
-  #     JSON.parse(response.body)
-  #   rescue RestClient::Exception => e
-  #     { error: "Failed to delete pet: #{e.message}" }
-  #   end
+    def delete_pet(id)
+      response = RestClient.delete("#{@base_url}/players/#{id}")
+      JSON.parse(response.body)
+    rescue RestClient::Exception => e
+      { error: "Failed to delete player: #{e.message}" }
+    end
 
   def view_players_by_team_id(team_id)
     response = RestClient.get("#{@base_url}/teams/#{team_id}/players")
@@ -341,7 +340,48 @@ class CLIInterface
   end
 
   def delete_player
-    puts "7"
+    # First, show all teams so user can select one
+    view_all_teams
+    print "\nEnter the ID of the Team to view players: "
+    team_id = gets.chomp.to_i
+
+    # Show players from the selected team
+    response = @api_client.view_players_by_team_id(team_id)
+    
+    if response.is_a?(Array)
+      if response.empty?
+        puts "This team has no players to delete."
+        return
+      else
+        puts "\n=== Players on this team ==="
+        response.each do |player|
+          display_team_player(player)
+          puts "-" * 50
+        end
+      end
+    else
+      puts "Error: #{response[:error]}"
+      return
+    end
+
+    # Ask user to select a player to delete
+    print "\nEnter the ID of the Player to delete: "
+    player_id = gets.chomp.to_i
+
+    print "Are you sure you want to delete this player? (y/n): "
+    confirmation = gets.chomp.downcase
+
+    if confirmation == 'y' || confirmation == 'yes'
+      response = @api_client.delete_pet(player_id)
+
+      if response[:error]
+        puts "Error: #{response[:error]}"
+      else
+        puts "Player removed successfully!"
+      end
+    else
+      puts "Player Removal Cancelled."
+    end
   end
 
   def display_team(team)
