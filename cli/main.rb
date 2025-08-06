@@ -104,11 +104,7 @@ class CLIInterface
     @menu_handler.show_welcome_message
 
     loop do
-      @menu_handler.display_menu
-      puts "Enter Your Command:"
-      choice = gets.chomp.downcase
-
-      result = @menu_handler.handle_choice(choice)
+      result = @menu_handler.display_and_handle_menu
       break if result == :quit
     end
   end

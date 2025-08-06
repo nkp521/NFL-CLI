@@ -49,7 +49,7 @@ GEM
     mime-types (3.7.0)
       logger
       mime-types-data (~> 3.2025, >= 3.2025.0507)
-    mime-types-data (3.2025.0729)
+    mime-types-data (3.2025.0805)
     minitest (5.25.5)
     mustermann (2.0.2)
       ruby2_keywords (~> 0.0.1)
@@ -59,6 +59,8 @@ GEM
     parser (3.3.9.0)
       ast (~> 2.4.1)
       racc
+    pastel (0.8.0)
+      tty-color (~> 0.5)
     prism (1.4.0)
     pry (0.14.2)
       coderay (~> 1.1)
@@ -103,7 +105,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.4)
-    rubocop (1.79.1)
+    rubocop (1.79.2)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -134,11 +136,22 @@ GEM
     sqlite3 (1.7.3-x86_64-darwin)
     sqlite3 (1.7.3-x86_64-linux)
     tilt (2.6.1)
+    tty-color (0.6.0)
+    tty-cursor (0.7.1)
+    tty-prompt (0.23.1)
+      pastel (~> 0.8)
+      tty-reader (~> 0.8)
+    tty-reader (0.9.0)
+      tty-cursor (~> 0.7)
+      tty-screen (~> 0.8)
+      wisper (~> 2.0)
+    tty-screen (0.8.2)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
+    wisper (2.0.1)
     zeitwerk (2.7.3)
 
 PLATFORMS
@@ -175,6 +188,7 @@ DEPENDENCIES
   sinatra (~> 2.1)
   sinatra-activerecord (~> 2.0)
   sqlite3 (~> 1.7)
+  tty-prompt
 
 BUNDLED WITH
    2.7.1

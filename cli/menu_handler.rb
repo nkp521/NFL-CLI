@@ -1,51 +1,58 @@
+require 'tty-prompt'
+
 class MenuHandler
   def initialize(cli_interface)
     @cli_interface = cli_interface
+    @prompt = TTY::Prompt.new
   end
 
-  def display_menu
-    puts "\n=== NFL Manager CLI ==="
-    puts "1. View all teams"
-    puts "2. View all players"
-    puts "3. View players by team ID"
-    puts "4. Create a new team"
-    puts "5. Create a new player"
-    puts "6. Move Team Location"
-    puts "7. Trade a Player"
-    puts "8. Delete a team"
-    puts "9. Delete a player"
-    puts "0. Position Information"
-    puts "q. Quit"
+  def display_and_handle_menu
+    puts "\n🏈 NFL Manager CLI 🏈"
+    puts "─" * 50
+
+    choice = @prompt.select("What would you like to do?", cycle: true, per_page: 12) do |t|
+      t.choice "View all teams", :view_teams
+      t.choice "Find Player by Name", :view_players
+      t.choice "View players by team", :view_players_by_team
+      t.choice "Create a new team", :create_team
+      t.choice "Create a new player", :create_player
+      t.choice "Move team location", :move_team_location
+      t.choice "Trade a player", :trade_player
+      t.choice "Delete a team", :delete_team
+      t.choice "Delete a player", :delete_player
+      t.choice "Position information", :position_info
+      t.choice "Exit", :quit
+    end
+
+    handle_choice(choice)
   end
 
   def handle_choice(choice)
     case choice
-    when '1'
+    when :view_teams
       @cli_interface.view_all_teams
-    when '2'
+    when :view_players
+
       @cli_interface.view_all_players
-    when '3'
+    when :view_players_by_team
       @cli_interface.view_players_by_team_id
-    when '4'
+    when :create_team
       @cli_interface.create_team
-    when '5'
+    when :create_player
       @cli_interface.create_player
-    when '6'
+    when :move_team_location
       @cli_interface.move_team_location
-    when '7'
+    when :trade_player
       @cli_interface.trade_player
-    when '8'
+    when :delete_team
       @cli_interface.delete_team
-    when '9'
+    when :delete_player
       @cli_interface.delete_player
-    when '0'
+    when :position_info
       @cli_interface.position_info
-    when 'q', 'quit', 'exit'
-      puts "Goodbye!"
+    when :quit
+      puts "\nThanks for using NFL Manager CLI!"
       return :quit
-    else
-      puts "Invalid choice. Please try again."
-      return :continue
     end
     :continue
   end
