@@ -31,4 +31,11 @@ class DisplayHelper
       puts "No Teams available."
     end
   end
+
+  def display_position(position)
+    puts "ID: #{position['id']}"
+    puts "Name: #{position['name']}"
+    puts "Description: #{position['description']}"
+    puts "Position Player Count: #{position['players'].count}"
+  end
 end

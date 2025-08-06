@@ -14,6 +14,7 @@ class MenuHandler
     puts "7. Trade a Player"
     puts "8. Delete a team"
     puts "9. Delete a player"
+    puts "0. Position Information"
     puts "q. Quit"
   end
 
