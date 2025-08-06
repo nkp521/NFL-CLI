@@ -1,9 +1,6 @@
-#!/usr/bin/env ruby
 require 'rest-client'
 require 'json'
 
-# TODO: Build your CLI application here!
-#
 class APIClient
   def initialize(base_url = 'http://localhost:9292')
     @base_url = base_url
@@ -290,7 +287,6 @@ class CLIInterface
     print "\nEnter the ID of the Player to update: "
     id = gets.chomp.to_i
 
-    # Get current player data
     current_player = @api_client.get_player(id)
     if current_player[:error]
       puts "Error: #{current_player[:error]}"
@@ -340,12 +336,10 @@ class CLIInterface
   end
 
   def delete_player
-    # First, show all teams so user can select one
     view_all_teams
     print "\nEnter the ID of the Team to view players: "
     team_id = gets.chomp.to_i
 
-    # Show players from the selected team
     response = @api_client.view_players_by_team_id(team_id)
     
     if response.is_a?(Array)
@@ -364,7 +358,6 @@ class CLIInterface
       return
     end
 
-    # Ask user to select a player to delete
     print "\nEnter the ID of the Player to delete: "
     player_id = gets.chomp.to_i
 
@@ -415,6 +408,5 @@ class CLIInterface
   end
 end
 
-# Start the CLI application
 cli = CLIInterface.new
 cli.run
