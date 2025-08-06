@@ -320,7 +320,24 @@ class CLIInterface
   end
 
   def delete_team
-    puts "6"
+    show_teams_info
+    print "\nEnter the ID of the team to delete: "
+    id = gets.chomp.to_i
+
+    print "Are you sure you want to delete this team? (y/n): "
+    confirmation = gets.chomp.downcase
+
+    if confirmation == 'y' || confirmation == 'yes'
+      response = @api_client.delete_team(id)
+
+      if response[:error]
+        puts "Error: #{response[:error]}"
+      else
+        puts "Team deleted successfully!"
+      end
+    else
+      puts "Deletion cancelled."
+    end
   end
 
   def delete_player
