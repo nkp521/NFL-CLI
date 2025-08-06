@@ -17,8 +17,8 @@ class MenuHandler
 
     choice = @prompt.select("\nWhat would you like to do?\n", cycle: true, per_page: 12) do |t|
       t.choice "View all teams", :view_teams
-      t.choice "Find Player by Name", :view_players
       t.choice "View players by team", :view_players_by_team
+      t.choice "Find Player by Name", :view_players_by_name
       t.choice "Create a new team", :create_team
       t.choice "Create a new player", :create_player
       t.choice "Move team location", :move_team_location
@@ -37,8 +37,7 @@ class MenuHandler
     when :view_teams
       @cli_interface.view_all_teams
     when :view_players
-
-      @cli_interface.view_all_players
+      @cli_interface.view_all_players_by_name
     when :view_players_by_team
       @cli_interface.view_players_by_team_id
     when :create_team

@@ -127,8 +127,9 @@ class CLIInterface
     end
   end
 
-  def view_all_players
-    puts "\n=== All Players ==="
+  def view_all_players_by_name
+    puts "\n=== Enter a name to find players ==="
+    player_name = gets.chomp.to_i
     response = @api_client.show_players
 
     if response.is_a?(Array)
