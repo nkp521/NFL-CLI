@@ -52,7 +52,11 @@ group :development do
   gem "rubocop"
 end
 
+gem "pastel"
+gem "tty-box"
 gem "tty-prompt"
+gem "tty-screen"
+gem "tty-spinner"
 
 # These gems will only be used when we are running tests
 group :test do
