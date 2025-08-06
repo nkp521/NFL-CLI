@@ -166,7 +166,7 @@ class CLIInterface
 
   def view_all_players
     puts "\n=== All Players ==="
-    response = @api_client.view_players
+    response = @api_client.show_players
 
     if response.is_a?(Array)
       if response.empty?
@@ -324,7 +324,7 @@ class CLIInterface
     print "\nEnter the ID of the team to delete: "
     id = gets.chomp.to_i
 
-    print "Are you sure you want to delete this team? (y/n): "
+    print "Are you sure you want to delete this team? It will delete all players associated with it! (y/n): "
     confirmation = gets.chomp.downcase
 
     if confirmation == 'y' || confirmation == 'yes'
