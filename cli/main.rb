@@ -104,7 +104,6 @@ class CLIInterface
     end
   end
 
-  private
   def view_all_teams
     puts "\n=== All Teams ==="
     response = @api_client.show_teams
