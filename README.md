@@ -81,15 +81,19 @@ ruby cli/main.rb
 
 ```
 NFL-CLI/
-├── cli/                   # Command-line interface
-│   ├── main.rb            # Main entry point
-│   ├── api_client/        # API communication
-│   └── interface/         # User interface components
-├── app/                   # Backend application
-│   ├── controllers/       # API endpoints
-│   └── models/            # Database models
-├── db/                    # Database files and migrations
-└── config/                # Application configuration
+├── cli/                                # Command-line interface
+│   ├── main.rb                         # Main entry point
+│   ├── api_client/                     # API communication
+│   ├── interface/                      # UI helpers and menus
+│   └── operations/                     # CLI operation classes
+├── app/                                # Sinatra backend
+│   ├── controllers/                    # API endpoints
+│   └── models/                         # ActiveRecord models
+├── config/                             # App configuration
+├── db/                                 # Database files and migrations
+│   ├── migrate/
+└─── spec/
+
 ```
 
 Enjoy managing your NFL teams and players!
