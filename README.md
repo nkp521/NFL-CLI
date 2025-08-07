@@ -93,7 +93,6 @@ NFL-CLI/
 ├── db/                                 # Database files and migrations
 │   ├── migrate/
 └─── spec/
-
 ```
 
 Enjoy managing your NFL teams and players!
