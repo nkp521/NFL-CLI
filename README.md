@@ -46,7 +46,7 @@ rake db:reset
 ### Step 4: Start the Server
 
 ```bash
-ruby config.ru -p 9292
+bundle exec rackup -p 9292
 ```
 
 The server will run on `http://localhost:9292`
