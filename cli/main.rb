@@ -1,7 +1,7 @@
 require 'rest-client'
 require 'json'
-require_relative 'menu_handler'
-require_relative 'display_helper'
+require_relative 'interface/menu_handler'
+require_relative 'interface/display_helper'
 
 class APIClient
   def initialize(base_url = 'http://localhost:9292')
