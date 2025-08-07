@@ -313,7 +313,7 @@ class CLIInterface
   end
 
   def delete_player
-    view_all_teams
+    @display.show_teams_info
     print "\nEnter the ID of the Team to view players: "
     team_id = gets.chomp.to_i
 
@@ -342,7 +342,7 @@ class CLIInterface
     confirmation = gets.chomp.downcase
 
     if %w[y yes].include?(confirmation)
-      response = @api_client.delete_pet(player_id)
+      response = @api_client.delete_player(player_id)
 
       if response[:error]
         puts "Error: #{response[:error]}"
@@ -355,21 +355,8 @@ class CLIInterface
   end
 
   def position_info
-    puts "\n=== All Players ==="
-    response = @api_client.show_positions
-
-    if response.is_a?(Array)
-      if response.empty?
-        puts "No positions found."
-      else
-        response.each do |position|
-          @display.display_position(position)
-          puts "-" * 50
-        end
-      end
-    else
-      puts "Error: #{response[:error]}"
-    end
+    puts "\n=== Position Information ==="
+    @display.show_positions_info
   end
 end
 
