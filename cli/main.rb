@@ -199,19 +199,18 @@ class CLIInterface
   def create_player
     puts "\n=== Create New Player ==="
 
-    @display.show_teams_info
-
     print "\nName: "
     name = gets.chomp
 
     print "Number: "
     number = gets.chomp.to_i
 
-    puts
-    return unless @display.show_positions_info
+    puts @display.show_positions_info
 
     print "\nPosition ID: "
     position_id = gets.chomp.to_i
+
+    puts @display.show_teams_info
 
     print "Team ID: "
     team_id = gets.chomp.to_i
