@@ -12,7 +12,7 @@ class APIClient
     response = RestClient.get("#{@base_url}/teams")
     JSON.parse(response.body)
   rescue RestClient::Exception => e
-    { error: "Failed to fetch Owners: #{e.message}" }
+    { error: "Failed to fetch Teams: #{e.message}" }
   end
 
   def create_team(data)
@@ -68,10 +68,10 @@ class APIClient
     response = RestClient.patch("#{@base_url}/players/#{id}", data.to_json, content_type: :json)
     JSON.parse(response.body)
   rescue RestClient::Exception => e
-    { error: "Failed to update pet: #{e.message}" }
+    { error: "Failed to update player: #{e.message}" }
   end
 
-  def delete_pet(id)
+  def delete_player(id)
     response = RestClient.delete("#{@base_url}/players/#{id}")
     JSON.parse(response.body)
   rescue RestClient::Exception => e
@@ -89,7 +89,7 @@ class APIClient
     response = RestClient.get("#{@base_url}/positions")
     JSON.parse(response.body)
   rescue RestClient::Exception => e
-    { error: "Failed to fetch Owners: #{e.message}" }
+    { error: "Failed to fetch Teams: #{e.message}" }
   end
 end
 
