@@ -3,6 +3,7 @@ require_relative 'interface/menu_handler'
 require_relative 'interface/display_helper'
 require_relative 'operations/team_operations'
 require_relative 'operations/player_operations'
+require_relative 'operations/position_operations'
 
 
 class CLIInterface
@@ -12,6 +13,7 @@ class CLIInterface
     
     @team_ops = TeamOperations.new(@api_client, @display)
     @player_ops = PlayerOperations.new(@api_client, @display)
+    @position_ops = PositionOperations.new(@api_client, @display)
     
     @menu_handler = MenuHandler.new(self)
   end
@@ -62,8 +64,7 @@ class CLIInterface
   end
 
   def position_info
-    puts "\n=== Position Information ==="
-    @display.show_positions_info
+    @position_ops.view_all
   end
 end
 
