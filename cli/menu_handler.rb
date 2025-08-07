@@ -55,7 +55,7 @@ class MenuHandler
     when :position_info
       @cli_interface.position_info
     when :quit
-      puts "\nThanks for using NFL Manager CLI!"
+      puts "\nSee You Next Time on NFL CLI Manager!\n"
       return :quit
     end
     :continue

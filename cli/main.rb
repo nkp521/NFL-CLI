@@ -201,19 +201,22 @@ class CLIInterface
 
     @display.show_teams_info
 
-    print "Name: "
+    print "\nName: "
     name = gets.chomp
 
     print "Number: "
     number = gets.chomp.to_i
 
-    print "Position: "
-    position = gets.chomp
+    puts
+    return unless @display.show_positions_info
+
+    print "\nPosition ID: "
+    position_id = gets.chomp.to_i
 
     print "Team ID: "
     team_id = gets.chomp.to_i
 
-    data = { name: name, number: number, position: position, team_id: team_id }
+    data = { name: name, number: number, position_id: position_id, team_id: team_id }
 
     response = @api_client.create_player(data)
 
