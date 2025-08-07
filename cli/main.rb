@@ -205,12 +205,12 @@ class CLIInterface
     print "Number: "
     number = gets.chomp.to_i
 
-    puts @display.show_positions_info
+    @display.show_positions_info
 
     print "\nPosition ID: "
     position_id = gets.chomp.to_i
 
-    puts @display.show_teams_info
+    @display.show_teams_info
 
     print "Team ID: "
     team_id = gets.chomp.to_i
