@@ -87,6 +87,6 @@ class APIClient
     response = RestClient.get("#{@base_url}/positions")
     JSON.parse(response.body)
   rescue RestClient::Exception => e
-    { error: "Failed to fetch Teams: #{e.message}" }
+    { error: "Failed to fetch Positions: #{e.message}" }
   end
 end
