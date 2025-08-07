@@ -12,7 +12,7 @@ class APIClient
     response = RestClient.get("#{@base_url}/teams")
     JSON.parse(response.body)
   rescue RestClient::Exception => e
-    { error: "Failed to fetch Owners: #{e.message}" }
+    { error: "Failed to fetch Teams: #{e.message}" }
   end
 
   def create_team(data)
@@ -68,10 +68,10 @@ class APIClient
     response = RestClient.patch("#{@base_url}/players/#{id}", data.to_json, content_type: :json)
     JSON.parse(response.body)
   rescue RestClient::Exception => e
-    { error: "Failed to update pet: #{e.message}" }
+    { error: "Failed to update player: #{e.message}" }
   end
 
-  def delete_pet(id)
+  def delete_player(id)
     response = RestClient.delete("#{@base_url}/players/#{id}")
     JSON.parse(response.body)
   rescue RestClient::Exception => e
@@ -89,7 +89,7 @@ class APIClient
     response = RestClient.get("#{@base_url}/positions")
     JSON.parse(response.body)
   rescue RestClient::Exception => e
-    { error: "Failed to fetch Owners: #{e.message}" }
+    { error: "Failed to fetch Teams: #{e.message}" }
   end
 end
 
@@ -127,17 +127,25 @@ class CLIInterface
     end
   end
 
-  def view_all_players
-    puts "\n=== All Players ==="
+  def view_all_players_by_name
+    puts "\n=== Enter a name to find players ==="
+    print "Player name: "
+    player_name = gets.chomp.downcase
+
     response = @api_client.show_players
 
     if response.is_a?(Array)
-      if response.empty?
-        puts "No players found."
+      matching_players = response.select do |player|
+        player['name'].downcase.include?(player_name)
+      end
+
+      if matching_players.empty?
+        puts "No players found matching '#{player_name}'."
       else
-        response.each do |player|
+        puts "\n=== Players matching '#{player_name}' ==="
+        matching_players.each do |player|
           @display.display_player(player)
-          puts "-" * 50
+          puts "-" * 80
         end
       end
     else
@@ -154,12 +162,12 @@ class CLIInterface
 
     if response.is_a?(Array)
       if response.empty?
-        puts "This team has no players."
+        puts "This team has no players"
       else
         puts "\n=== Players for this team ==="
         response.each do |player|
           @display.display_team_player(player)
-          puts "-" * 50
+          puts "-" * 80
         end
       end
     else
@@ -191,21 +199,23 @@ class CLIInterface
   def create_player
     puts "\n=== Create New Player ==="
 
-    @display.show_teams_info
-
-    print "Name: "
+    print "\nName: "
     name = gets.chomp
 
     print "Number: "
     number = gets.chomp.to_i
 
-    print "Position: "
-    position = gets.chomp
+    @display.show_positions_info
+
+    print "\nPosition ID: "
+    position_id = gets.chomp.to_i
+
+    @display.show_teams_info
 
     print "Team ID: "
     team_id = gets.chomp.to_i
 
-    data = { name: name, number: number, position: position, team_id: team_id }
+    data = { name: name, number: number, position_id: position_id, team_id: team_id }
 
     response = @api_client.create_player(data)
 
@@ -303,7 +313,7 @@ class CLIInterface
   end
 
   def delete_player
-    view_all_teams
+    @display.show_teams_info
     print "\nEnter the ID of the Team to view players: "
     team_id = gets.chomp.to_i
 
@@ -332,7 +342,7 @@ class CLIInterface
     confirmation = gets.chomp.downcase
 
     if %w[y yes].include?(confirmation)
-      response = @api_client.delete_pet(player_id)
+      response = @api_client.delete_player(player_id)
 
       if response[:error]
         puts "Error: #{response[:error]}"
@@ -345,21 +355,8 @@ class CLIInterface
   end
 
   def position_info
-    puts "\n=== All Players ==="
-    response = @api_client.show_positions
-
-    if response.is_a?(Array)
-      if response.empty?
-        puts "No positions found."
-      else
-        response.each do |position|
-          @display.display_position(position)
-          puts "-" * 50
-        end
-      end
-    else
-      puts "Error: #{response[:error]}"
-    end
+    puts "\n=== Position Information ==="
+    @display.show_positions_info
   end
 end
 

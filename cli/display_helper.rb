@@ -32,10 +32,27 @@ class DisplayHelper
     end
   end
 
+  def show_positions_info
+    positions_response = @api_client.show_positions
+    if positions_response.is_a?(Array)
+      if positions_response.empty?
+        puts "No positions found."
+      else
+        puts "Available Positions:"
+        positions_response.each do |position|
+          display_position(position)
+          puts "-" * 50
+        end
+      end
+    else
+      puts "Error loading positions"
+    end
+  end
+
   def display_position(position)
     puts "ID: #{position['id']}"
     puts "Name: #{position['name']}"
     puts "Description: #{position['description']}"
-    puts "Position Player Count: #{position['players'].count}"
+    puts "Position Player Count: #{position['player_count']}"
   end
 end
